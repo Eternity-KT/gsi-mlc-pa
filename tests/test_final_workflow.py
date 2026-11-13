@@ -55,7 +55,7 @@ def test_completed_predictions_are_hash_and_timestamp_checked(tmp_path):
 
 
 def test_p0_source_bytes_still_match_the_verified_benchmark():
-    manifest_path = ROOT / "results/v6_3_3_final/run_eb0b08cd254f4f0e/run_manifest.json"
+    manifest_path = ROOT / "results/v6_3_3_final_four_models/run_6c5fb2bebb16a7dc/run_manifest.json"
     if not manifest_path.is_file():
         pytest.skip("Published benchmark artifacts are not installed")
     result = source_consistency(manifest_path.parent)

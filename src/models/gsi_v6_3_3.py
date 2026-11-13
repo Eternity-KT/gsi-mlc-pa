@@ -1,111 +1,165 @@
-"""
-GSI-MLC-PA Version 6.3.3: Adaptive Tri-Regime Inference & Smooth Boundary Blending.
+"""GSI-MLC-PA v6.3.3 final classifier."""
 
-Reference:
-    - spec/spec_v6_3_3.md
+from typing import Any, Dict, List, Optional
 
-Enhancements over v6.3.2:
-1. Tri-Regime Partitioning (tau_balance=0.85):
-   - Negative-majority (pi_l < 0.425): Bayes likelihood ratio and root-weighted calibration.
-   - Symmetric (0.425 <= pi_l <= 0.575): identity calibration.
-   - Positive-majority (pi_l > 0.575): inverted likelihood ratio and calibration.
-2. Smooth Boundary Blending (blend_kappa = 20.0):
-   - Eliminates discontinuity cliffs between CV folds by smoothly interpolating decision thresholds via sigmoid weighting.
-3. Scale-Aligned One-Step Normalized Mean-Field Coupling (OS-NMF):
-   - Inherits v6.3.2 spin-centering, degree normalization, and bounded logit shifts.
-4. Frozen paper configuration:
-   - SAMG is disabled by default; it remains an explicit experimental option.
-   - Reference config: configs/v6_3_3_final.json.
-"""
-
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 import numpy as np
+from sklearn.base import BaseEstimator, ClassifierMixin
 
-from .gsi_v6_3 import _fit_binary_model_safe, normalize_augmented_probabilities
-from .gsi_v6_3_2 import GSIMLCPAv6_3_2Classifier
-from ..selection.cv_peeling import (
-    CVPeelingConfig,
-    CVStratifiedPeelingSelector,
-    evaluate_label_5fold_cv,
-)
+from .base_learners import create_binary_estimator
+from .binary_relevance import _ConstantClassifier
+from ..selection.cv_peeling import CVPeelingConfig, CVStratifiedPeelingSelector, evaluate_label_5fold_cv
+from ..selection.stratified_peeling import normalize_augmented_probabilities
 from ..selection.br_residual_correlation import (
-    build_residual_dependency_graph,
-    compute_br_residual_matrix,
-    compute_residual_pcc_matrix,
-    export_residual_correlation_audit_table,
+    build_residual_dependency_graph, compute_br_residual_matrix,
+    compute_residual_pcc_matrix, export_residual_correlation_audit_table,
     one_step_normalized_mean_field,
 )
 from ..selection.tri_regime_decision import (
-    apply_tri_regime_abstention,
-    compute_label_balance_factor,
+    apply_tri_regime_abstention, compute_label_balance_factor,
     compute_tri_regime_adaptive_thresholds_table,
 )
 from ..calibration.adaptive_calibrator import MultiLabelAdaptiveCalibrator
 
 
-class GSIMLCPAv6_3_3Classifier(GSIMLCPAv6_3_2Classifier):
-    """
-    GSI-MLC-PA Version 6.3.3 Classifier with Adaptive Tri-Regime Inference,
-    Smooth Boundary Blending, and One-Step Normalized Mean-Field Coupling.
-    """
+def _fit_binary_model_safe(estimator_factory, X: np.ndarray, y: np.ndarray) -> Any:
+    """Safely fit a binary estimator, including single-class targets."""
+    unique = np.unique(y)
+    if len(unique) <= 1:
+        const_val = int(unique[0]) if len(unique) == 1 else 0
+        return _ConstantClassifier(const_val)
+    est = estimator_factory()
+    est.fit(X, y)
+    return est
+
+
+class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
+    """GSI-MLC-PA v6.3.3 with adaptive tri-regime inference and OS-NMF."""
 
     def __init__(
-        self,
-        base_learner: str = "logistic",
-        stratified_threshold: float = 0.75,
-        residual_corr_threshold: float = 0.25,
-        cv_folds: int = 5,
-        max_peeling_depth: int = 3,
-        peeling_metric: str = "selective_f1",
-        decaying_threshold: bool = True,
-        threshold_decay_step: float = 0.05,
-        aug_normalization: str = "matching",
-        error_format: str = "residual",
-        cost: float = 0.30,
-        gamma_min: float = 0.70,
-        use_prior_adaptive: bool = True,
-        calibrate_tail: bool = True,
-        calibration_method: str = "sqrt_platt",
-        precision_guard: bool = True,
-        min_tau_1: float = 0.50,
-        abstain_value: int = -1,
-        random_state: int = 42,
-        mf_alpha: float = 0.25,
-        mf_z_max: float = 0.5,
-        tau_balance: float = 0.85,
-        blend_kappa: float = 20.0,
-        tau_1_cap: float = 0.55,
-        tau_0_floor: float = 0.45,
+        self, base_learner: str = "logistic", stratified_threshold: float = 0.75,
+        residual_corr_threshold: float = 0.25, cv_folds: int = 5,
+        max_peeling_depth: int = 3, peeling_metric: str = "selective_f1",
+        decaying_threshold: bool = True, threshold_decay_step: float = 0.05,
+        aug_normalization: str = "matching", error_format: str = "residual",
+        cost: float = 0.30, gamma_min: float = 0.70,
+        use_prior_adaptive: bool = True, calibrate_tail: bool = True,
+        calibration_method: str = "sqrt_platt", precision_guard: bool = True,
+        min_tau_1: float = 0.50, abstain_value: int = -1,
+        random_state: int = 42, mf_alpha: float = 0.25, mf_z_max: float = 0.5,
+        tau_balance: float = 0.85, blend_kappa: float = 20.0,
+        tau_1_cap: float = 0.55, tau_0_floor: float = 0.45,
         separation_aware: bool = False,
     ):
-        super().__init__(
-            base_learner=base_learner,
-            stratified_threshold=stratified_threshold,
-            residual_corr_threshold=residual_corr_threshold,
-            cv_folds=cv_folds,
-            max_peeling_depth=max_peeling_depth,
-            peeling_metric=peeling_metric,
-            decaying_threshold=decaying_threshold,
-            threshold_decay_step=threshold_decay_step,
-            aug_normalization=aug_normalization,
-            error_format=error_format,
-            cost=cost,
-            gamma_min=gamma_min,
-            use_prior_adaptive=use_prior_adaptive,
-            calibrate_tail=calibrate_tail,
-            calibration_method=calibration_method,
-            precision_guard=precision_guard,
-            min_tau_1=min_tau_1,
-            abstain_value=abstain_value,
-            random_state=random_state,
-            mf_alpha=mf_alpha,
-            mf_z_max=mf_z_max,
-        )
+        self.base_learner = base_learner
+        self.stratified_threshold = float(stratified_threshold)
+        self.residual_corr_threshold = float(residual_corr_threshold)
+        self.cv_folds = int(cv_folds)
+        self.max_peeling_depth = int(max_peeling_depth)
+        self.peeling_metric = str(peeling_metric)
+        self.decaying_threshold = bool(decaying_threshold)
+        self.threshold_decay_step = float(threshold_decay_step)
+        self.aug_normalization = str(aug_normalization)
+        self.error_format = str(error_format)
+        self.cost = float(cost)
+        self.gamma_min = float(gamma_min)
+        self.use_prior_adaptive = bool(use_prior_adaptive)
+        self.calibrate_tail = bool(calibrate_tail)
+        self.calibration_method = str(calibration_method)
+        self.precision_guard = bool(precision_guard)
+        self.min_tau_1 = float(min_tau_1)
+        self.abstain_value = int(abstain_value)
+        self.random_state = int(random_state)
+        self.mf_alpha = float(mf_alpha)
+        self.mf_z_max = float(mf_z_max)
         self.tau_balance = float(tau_balance)
         self.blend_kappa = float(blend_kappa)
         self.tau_1_cap = float(tau_1_cap)
         self.tau_0_floor = float(tau_0_floor)
         self.separation_aware = bool(separation_aware)
+        self.is_fitted_ = False
+        self.signed_residual_corr_matrix_ = None
+
+    def _create_binary_model(self):
+        """Create the configured binary estimator."""
+        return create_binary_estimator(self.base_learner, random_state=self.random_state)
+
+    @staticmethod
+    def _predict_prob_single(estimator: Any, X_eval: np.ndarray) -> np.ndarray:
+        """Extract positive-class probabilities from a fitted binary estimator."""
+        if hasattr(estimator, "predict_proba"):
+            probs = np.asarray(estimator.predict_proba(X_eval), dtype=np.float64)
+            if probs.ndim == 2:
+                return np.clip(probs[:, 1], 0.0, 1.0).astype(np.float32)
+            return np.clip(probs.ravel(), 0.0, 1.0).astype(np.float32)
+        if hasattr(estimator, "decision_function"):
+            scores = np.asarray(estimator.decision_function(X_eval), dtype=np.float64)
+            return np.clip(1.0 / (1.0 + np.exp(-np.clip(scores, -30.0, 30.0))), 0.0, 1.0).astype(np.float32)
+        preds = np.asarray(estimator.predict(X_eval), dtype=np.float64)
+        return np.clip(preds.ravel(), 0.0, 1.0).astype(np.float32)
+
+    def _apply_symmetric_chow_rejection(self, probabilities, cost):
+        predictions = np.full(probabilities.shape, self.abstain_value, dtype=np.int32)
+        predictions[probabilities <= cost] = 0
+        predictions[probabilities >= 1.0 - cost] = 1
+        return predictions
+
+
+
+    def predict_proba(self, X) -> np.ndarray:
+        """Predict probabilities on test samples using One-Step Mean-Field on DL."""
+        if not self.is_fitted_:
+            raise ValueError("GSIMLCPAv6_3_3Classifier is not fitted yet.")
+
+        X = np.asarray(X, dtype=np.float32)
+        n_samples = X.shape[0]
+        P_final = np.zeros((n_samples, self.n_labels_), dtype=np.float32)
+
+        # STAGE 1: Predict Independent Labels across layers
+        current_test_X = X
+        accumulated_il_test_probs: List[np.ndarray] = []
+
+        for layer_idx, layer in enumerate(self.independent_layers_):
+            layer_models = self.br_il_layer_models_[layer_idx]
+            for lbl in layer:
+                model = layer_models[lbl]
+                p_l = self._predict_prob_single(model, current_test_X)
+                P_final[:, lbl] = p_l
+                accumulated_il_test_probs.append(p_l)
+
+            if accumulated_il_test_probs:
+                p_raw = np.column_stack(accumulated_il_test_probs)
+                p_norm = normalize_augmented_probabilities(
+                    p_raw, reference_X=X, strategy=self.aug_normalization
+                )
+                current_test_X = np.hstack([X, p_norm])
+
+        FS_context_test = current_test_X
+
+        # STAGE 2: Predict Dependent Labels via Base BR + Mean-Field
+        dl = self.dependent_labels_
+        if len(dl) > 0:
+            P_base_DL = np.column_stack([
+                self._predict_prob_single(self.br_base_dl_models_[lbl], FS_context_test)
+                for lbl in dl
+            ])
+
+            if len(dl) >= 2 and self.signed_residual_corr_matrix_ is not None:
+                P_refined_DL = one_step_normalized_mean_field(
+                    P_base=P_base_DL,
+                    corr_matrix=self.signed_residual_corr_matrix_,
+                    alpha=self.mf_alpha,
+                    threshold=self.residual_corr_threshold,
+                    z_max=self.mf_z_max,
+                )
+                P_final[:, dl] = P_refined_DL
+            else:
+                P_final[:, dl] = P_base_DL
+
+        # Apply tail calibration
+        if self.calibrate_tail and self.calibrator_ is not None:
+            P_final = self.calibrator_.transform(P_final)
+
+        return np.clip(P_final, 0.0, 1.0).astype(np.float32)
 
     def fit(self, X, Y):
         """Fit GSI-MLC-PA v6.3.3 using CV peeling, OS-NMF coupling, and Tri-Regime calibration."""

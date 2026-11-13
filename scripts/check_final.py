@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE = ROOT / "results/v6_3_3_final/run_eb0b08cd254f4f0e"
+RELEASE = ROOT / "results/v6_3_3_final_four_models/run_6c5fb2bebb16a7dc"
 LOCK = ROOT / "requirements-final-env.lock.txt"
 
 
@@ -147,7 +147,7 @@ def smoke(output_root, gpu=False, timeout=600):
         raise ValueError("Smoke runner did not identify its output directory")
     run_dir = Path(run_line.split("=", 1)[1])
     before = prediction_state(run_dir)
-    if len(before) != 6 * len(learners):
+    if len(before) != 4 * len(learners):
         raise ValueError("Smoke prediction set is incomplete")
     run_step(arguments, timeout, capture=True)
     if prediction_state(run_dir) != before:

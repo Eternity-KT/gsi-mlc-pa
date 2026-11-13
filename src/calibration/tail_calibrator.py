@@ -2,7 +2,7 @@
 Tail Probability Calibration for Extreme Label Imbalance.
 
 Reference:
-    - spec/spec_v6_3.md
+    - spec/spec_v6_3_3.md
     - Kull et al. (2017) "Beta calibration: a well-founded and easily implemented alternative on two-class problems"
     - Platt (1999) Probabilistic Outputs for Support Vector Machines
 

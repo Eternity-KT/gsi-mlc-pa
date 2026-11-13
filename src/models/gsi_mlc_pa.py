@@ -444,7 +444,7 @@ class GSIMLCPartialAbstentionClassifier(BaseEstimator, ClassifierMixin):
 
         Independent labels form deterministic roots. If direction == 'ascending',
         remaining dependent labels are ordered by ascending cumulative correlation
-        (spec_V5_1.md requirement: least coupled labels first).
+        (historical v5.1 design requirement: least coupled labels first).
         If direction == 'descending', remaining dependent labels are appended by
         strongest connection to an already placed label (legacy behavior).
         """

@@ -2,7 +2,7 @@
 
 Reference:
     - meeting_summary.md (Core Section, v6.2)
-    - spec/spec_v6_2.md
+    - spec/spec_v6_3_3.md
 
 This module computes the prediction error residuals of base Binary Relevance (BR)
 classifiers on candidate dependent labels (DL), calculates their Pearson Correlation

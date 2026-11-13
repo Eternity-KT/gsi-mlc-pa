@@ -525,7 +525,7 @@ def generate_markdown_report(df_mean: pd.DataFrame, df_dl_full: pd.DataFrame):
     lines = []
     lines.append("# Báo Cáo Thực Nghiệm Chuyên Sâu: Thử Nghiệm Tách Riêng Tập Phụ Thuộc ($DL$) Khi Tắt Toàn Bộ $IL$")
     lines.append("## Đánh Giá Vai Trò Của Ngữ Cảnh Tĩnh $IL$, Chuỗi Thưa (Sparse CC) vs. Chuỗi Dày (Dense CC) Trên 3 Base Learners và 10 Benchmark Datasets")
-    lines.append("\n> **Tài liệu tham chiếu:** [meeting_summary.md](file:///d:/University_Subject/ML%20Research/BR_CC/meeting_summary.md) | [spec/spec_v5_1_1.md](file:///d:/University_Subject/ML%20Research/BR_CC/spec/spec_v5_1_1.md) | [results_v5_1_test/data_labels_analize.tex](file:///d:/University_Subject/ML%20Research/BR_CC/results_v5_1_test/data_labels_analize.tex)")
+    lines.append("\n> **Tài liệu tham chiếu:** thiết kế lịch sử v5.1.1")
     lines.append("> **Giao thức thực nghiệm:** 5-Fold Multilabel Stratified Cross-Validation, Chi phí từ chối $c = 0.30$, Ngưỡng bóc tách tầng $\tau = 0.70$, Ngưỡng lọc chuỗi thưa $\theta_{\text{corr}} = 0.75$, Chuẩn hóa MaxAbsScaler.")
     lines.append("\n---\n")
 

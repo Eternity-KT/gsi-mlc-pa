@@ -27,7 +27,7 @@ def test_final_inventory_contains_only_required_sources_data_and_results():
     records, release, raw_count = package.payload()
     assert raw_count == 16
     assert set(release["identity"]["source_files"]).issubset(records)
-    assert sum(name.endswith(".npz") for name in records) == 900
+    assert sum(name.endswith(".npz") for name in records) == 600
     assert "data/CHD_49/readme.txt" in records
     assert "data/HumanPseAAC/HumanPseAAC3106-ReadMe.txt" in records
     assert "scripts/package_final.py" in records
@@ -35,6 +35,8 @@ def test_final_inventory_contains_only_required_sources_data_and_results():
     assert "scripts/validate_datasets.py" in records
     assert "scripts/verify_results.py" in records
     assert "tests/test_final_package.py" in records
+    assert "src/models/gsi_v6_3_3.py" in records
+    assert not any(f"src/models/gsi_v6_{version}.py" in records for version in ("1", "1_1", "2", "3", "3_1", "3_2"))
     for name in records:
         assert not name.startswith(("papers/", "draft_end/", "docs/", "spec/", "scratch/", ".venv", "TaiLieuThamKhao/", "results_v", "results_pa_"))
         assert not name.endswith((".pdf", ".tex", ".pyc"))
@@ -66,7 +68,7 @@ def tiny_project(tmp_path):
     write("configs/datasets_v6_3_3.json", json.dumps({"datasets": {"tiny": {"files": [{
         "path": "data/raw.txt", "bytes": 12, "sha256": package.sha256(b"raw source\r\n"),
     }]}}}).encode())
-    release = {"status": "complete", "completed_cells": 900, "identity": {"source_files": {
+    release = {"status": "complete", "completed_cells": 600, "identity": {"source_files": {
         "src/model.py": package.sha256(b"value = 1\r\n"),
     }}}
     write((package.RELEASE / "run_manifest.json").as_posix(), json.dumps(release).encode())

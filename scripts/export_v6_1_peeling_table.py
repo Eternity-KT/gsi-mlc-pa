@@ -146,7 +146,7 @@ def extract_peeling_breakdown(
     md_lines = [
         "# BẢNG CHI TIẾT PHÂN TÁCH NHÃN ĐỘC LẬP (IL) VÀ PHỤ THUỘC (DL) QUA TỪNG TẦNG (GSI-MLC-PA v6.1)\n",
         f"**Thời gian trích xuất:** {time.strftime('%Y-%m-%d %H:%M:%S')}  ",
-        "**Tài liệu tham chiếu:** `meeting_summary.md`, `spec/spec_v6_1.md`  ",
+        "**Tài liệu tham chiếu:** thiết kế lịch sử v6.1  ",
         "**Cấu hình:** 5-Fold Cross-Validation Out-Of-Fold, Ngưỡng thăng hạng $\\tau = 0.75$, Chi phí từ chối $c = 0.30$\n",
         "---\n",
         "## 1. Bảng Phân Tách Chi Tiết $IL_1, IL_2, IL_3$ và $DL_{\\text{residual}}$ Trên 10 Tập Dữ Liệu\n",

@@ -272,7 +272,7 @@ def update_markdown_report(df: pd.DataFrame, output_paths: List[Path]):
         "**Tác giả:** Machine Learning Research Group  ",
         "**Dự án:** GSI-MLC-PA (Phân tầng Thích ứng và Chuỗi Tương quan có Từ chối Từng phần)  ",
         "**Phiên bản:** v6 Core (Branch `v6`)  ",
-        "**Tài liệu tham chiếu:** `meeting_summary.md`, `spec/spec_v6.md`  ",
+        "**Tài liệu tham chiếu:** thiết kế lịch sử v6  ",
         f"**Thời gian thực hiện:** {time.strftime('%Y-%m-%d %H:%M:%S')}  ",
         "**Quy trình đánh giá:** 5-Fold Multilabel Stratified Cross-Validation ngoài (Outer CV)  ",
         "**Chi phí từ chối (Rejection Cost):** $c = 0.30$  ",

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "version": "v6.3.3-final",
+  "version": "v6.3.3-final-four-models",
   "variant": "standard_no_samg",
   "dataset_manifest": "configs/datasets_v6_3_3.json",
   "datasets": ["emotions", "scene", "yeast", "chd49", "music", "gpositivepseaac", "genbase", "viruspseaac", "plantpseaac", "humanpseaac"],
   "base_learners": ["logistic", "svm_calibrated", "mlp"],
-  "models": ["BR", "CC", "MLC_PA", "GSI_v6_2_1", "GSI_v6_3_2", "GSI_v6_3_3"],
+  "models": ["BR", "CC", "MLC_PA", "GSI_v6_3_3"],
   "cv": {
     "outer_splits": 5,
     "shuffle": true,
@@ -31,7 +31,7 @@
     "cost": 0.30,
     "abstain_value": -1
   },
-  "gsi_v6_3_2": {
+  "gsi_v6_3_3": {
     "gamma_min": 0.70,
     "use_prior_adaptive": true,
     "calibrate_tail": true,
@@ -39,9 +39,7 @@
     "precision_guard": true,
     "min_tau_1": 0.50,
     "mf_alpha": 0.25,
-    "mf_z_max": 0.50
-  },
-  "gsi_v6_3_3": {
+    "mf_z_max": 0.50,
     "tau_balance": 0.85,
     "blend_kappa": 20.0,
     "tau_1_cap": 0.55,

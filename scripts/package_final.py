@@ -13,8 +13,8 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE = Path("results/v6_3_3_final/run_eb0b08cd254f4f0e")
-PACKAGE = "BR_CC-v6.3.3-final"
+RELEASE = Path("results/v6_3_3_final_four_models/run_6c5fb2bebb16a7dc")
+PACKAGE = "BR_CC-v6.3.3-final-four-models"
 MANIFEST = "PACKAGE_MANIFEST.json"
 CHECKSUMS = "PACKAGE_CHECKSUMS.sha256"
 FIXED_TIME = (2026, 10, 28, 0, 0, 0)
@@ -59,8 +59,8 @@ def payload(root=ROOT, include_data=True):
     """Use frozen inventories and explicit workflow files, never a directory dump."""
     root = Path(root).resolve()
     release = json.loads((root / RELEASE / "run_manifest.json").read_text(encoding="utf-8"))
-    if release["status"] != "complete" or release["completed_cells"] != 900:
-        raise ValueError("The reference must contain all 900 completed fits")
+    if release["status"] != "complete" or release["completed_cells"] != 600:
+        raise ValueError("The reference must contain all 600 completed fits")
     data = json.loads((root / "configs/datasets_v6_3_3.json").read_text(encoding="utf-8"))
     frozen = release["identity"]["source_files"]
     names = set(frozen) | set(SUPPORT)
@@ -139,7 +139,12 @@ def verify_package(path):
 def build(output_root, include_data=True):
     records, release, raw_count = payload(ROOT, include_data=include_data)
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-    dirty = subprocess.check_output(["git", "status", "--porcelain", "--untracked-files=all"], cwd=ROOT, text=True).strip()
+    dirty = subprocess.check_output([
+        "git", "status", "--porcelain", "--untracked-files=all", "--",
+        "src", "configs", "scripts", "tests", "README.md", ".gitignore",
+        ".gitattributes", "pytest-final.ini", "requirements-final.lock.txt",
+        "requirements-final-env.lock.txt", "data",
+    ], cwd=ROOT, text=True).strip()
     if dirty:
         raise ValueError("Commit project changes before packaging so the package records a clean source commit")
     output_root = Path(output_root).resolve()
@@ -155,7 +160,7 @@ def build(output_root, include_data=True):
         "benchmark_source_commit": release["source_commit"],
         "benchmark_run_id": release["run_id"], "variant": "standard_no_samg",
         "frozen_source_files": len(release["identity"]["source_files"]),
-        "benchmark_fits": 900, "dataset_count": 10,
+        "benchmark_fits": release["completed_cells"], "dataset_count": 10,
         "raw_data_included": include_data, "raw_input_files": raw_count,
         "code_license_file": next((name for name in records if Path(name).name.lower() in ("license", "license.txt", "license.md") and "/" not in name), None),
         "file_count": len(records) + 2,

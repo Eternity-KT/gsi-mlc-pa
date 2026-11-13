@@ -143,7 +143,7 @@ def evaluate_dl_raw_br(
 
         if accumulated_il_test_probs:
             p_raw = np.column_stack(accumulated_il_test_probs)
-            from src.models.gsi_v6_3 import normalize_augmented_probabilities
+            from src.selection.stratified_peeling import normalize_augmented_probabilities
             p_norm = normalize_augmented_probabilities(
                 p_raw, reference_X=X, strategy=model.aug_normalization
             )

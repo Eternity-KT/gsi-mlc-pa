@@ -1,7 +1,7 @@
 """Stratified Data-Driven Peeling Partition Provider for GSI-MLC-PA v5.1.
 
 This module implements the non-greedy, performance-based iterative peeling
-partitioning described in spec_V5_1.md.
+partitioning described in the historical v5.1 design.
 
 Core Principles:
 1. Performance-based Independent Label (IL) Identification:

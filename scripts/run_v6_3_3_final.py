@@ -38,8 +38,6 @@ from src.evaluation.metrics import (
 from src.models.base_learners import create_binary_estimator, load_experiment_config
 from src.models.binary_relevance import BinaryRelevanceClassifier
 from src.models.classifier_chain import ClassifierChainClassifier
-from src.models.gsi_v6_2 import GSIMLCPAv6_2Classifier
-from src.models.gsi_v6_3_2 import GSIMLCPAv6_3_2Classifier
 from src.models.gsi_v6_3_3 import GSIMLCPAv6_3_3Classifier
 from src.models.mlc_pa import MLCPartialAbstentionClassifier
 
@@ -116,11 +114,6 @@ def make_model(name, learner, seed, config):
         marginal = BinaryRelevanceClassifier(base_estimator=binary, random_state=seed)
         return MLCPartialAbstentionClassifier(base_estimator=marginal, random_state=seed, **config["mlc_pa"])
     common = {**config["gsi_common"], "base_learner": learner, "random_state": seed}
-    if name == "GSI_v6_2_1":
-        return GSIMLCPAv6_2Classifier(**common)
-    common.update(config["gsi_v6_3_2"])
-    if name == "GSI_v6_3_2":
-        return GSIMLCPAv6_3_2Classifier(**common)
     if name == "GSI_v6_3_3":
         return GSIMLCPAv6_3_3Classifier(**common, **config["gsi_v6_3_3"])
     raise ValueError(f"Unknown model: {name}")
@@ -375,7 +368,7 @@ def execute(config_path, output_root, datasets=None, learners=None, folds=None, 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=ROOT / "configs/v6_3_3_final.json")
-    parser.add_argument("--output-root", type=Path, default=ROOT / "results/v6_3_3_final")
+    parser.add_argument("--output-root", type=Path, default=ROOT / "results/v6_3_3_final_four_models")
     parser.add_argument("--datasets", nargs="+")
     parser.add_argument("--base-learners", nargs="+")
     parser.add_argument("--folds", nargs="+", type=int)

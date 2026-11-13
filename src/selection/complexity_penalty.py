@@ -1,7 +1,7 @@
 """Complexity and Runtime Penalty Module for Stratified Partitioning.
 
 This module provides standalone evaluation of computational complexity and runtime
-penalties for the iterative peeling process, as specified in spec_V5_1.md (Section 4).
+penalties for the iterative peeling process in the historical v5.1 design.
 
 Mathematical Formulation:
 -------------------------

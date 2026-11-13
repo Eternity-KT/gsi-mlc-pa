@@ -1,7 +1,7 @@
 """
 Layer-Wise Ablation Framework for GSI-MLC-PA v5.1.1.
 
-Implements the 6 layer ablation regimes specified in spec_v5_1_1.md:
+Implements the six historical v5.1.1 layer ablation regimes:
 1. ABL_1_ONLY_IL1: Evaluate performance on IL_1 only.
 2. ABL_2_ONLY_IL2: Evaluate performance on IL_2 only.
 3. ABL_2_ACCUM_IL12: Evaluate performance on IL_1 + IL_2.

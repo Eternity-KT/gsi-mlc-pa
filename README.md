@@ -97,10 +97,10 @@ when interpreting generalization and statistical comparisons.
 
 ## Experimental protocol
 
-The benchmark evaluates six configured models across ten datasets, three
-base learners and five outer folds, for a total of **900 fitted models**.
-Reference baselines include Binary Relevance (BR), Classifier Chains (CC)
-and MLC-PA. Exact model settings are captured with each experiment.
+The final benchmark evaluates four models across ten datasets, three base
+learners and five outer folds, for a total of **600 fitted models**: Binary
+Relevance (BR), Classifier Chains (CC), MLC-PA and GSI-MLC-PA v6.3.3. Exact
+model settings are captured with each experiment.
 
 | Setting | Protocol |
 |---|---|
@@ -125,8 +125,8 @@ disabled TF32.
 
 ## Run experiments
 
-Run the benchmark models on Emotions with Logistic Regression across five
-folds (**30 fits**):
+Run the four final models on Emotions with Logistic Regression across five
+folds (**20 fits**):
 
 ```powershell
 .\.venv-final\Scripts\python.exe scripts/run_experiments.py --datasets emotions --base-learners logistic
@@ -162,7 +162,7 @@ Run the regression suite:
 .\.venv-final\Scripts\python.exe scripts/check_final.py --stage tests
 ```
 
-Run all six models on one VirusPseAAC fold with Logistic Regression, check
+Run all four models on one VirusPseAAC fold with Logistic Regression, check
 checkpoint resume and compare predictions against the saved reference:
 
 ```powershell
@@ -170,7 +170,7 @@ checkpoint resume and compare predictions against the saved reference:
 ```
 
 Add `--gpu-smoke` to exercise all three learners, including CUDA MLP
-(**18 fits**). Smoke outputs are stored under `scratch/final_checks/`.
+(**12 fits**). Smoke outputs are stored under `scratch/final_checks/`.
 [pytest-final.ini](pytest-final.ini) selects the experiment regression suite,
 covering data loading, metrics, calibration, label selection, checkpoints
 and packaging.

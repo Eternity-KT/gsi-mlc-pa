@@ -17,7 +17,7 @@ def generate_report():
     # Markdown content
     lines = []
     lines.append("# BÁO CÁO KHẢO SÁT: ĐỘ MẤT CÂN BẰNG CỦA CÁC NHÃN TRONG TẬP DL (DEPENDENT LABELS) Ở PHIÊN BẢN v6.2.1\n")
-    lines.append("**Tài liệu tham chiếu:** `meeting_summary.md` (Mục **core** & **option**), `spec/spec_v6_2.md`\n")
+    lines.append("**Tài liệu tham chiếu:** thiết kế lịch sử v6.2\n")
     lines.append("**Phiên bản khảo sát:** GSI-MLC-PA v6.2.1 (`GSI_v6_2_Decay` - Hạ ngưỡng phân tầng IL: Tầng 1 $\\tau=0.75$, Tầng 2 $\\tau=0.70$, Tầng 3 $\\tau=0.65$)\n")
     lines.append("**Bộ phân loại cơ sở:** Logistic Regression, Calibrated SVM, Multi-Layer Perceptron (MLP)\n")
     lines.append("\n---\n")
