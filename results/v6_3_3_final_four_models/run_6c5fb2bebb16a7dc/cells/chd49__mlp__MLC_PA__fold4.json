@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "chd49",
+    "Base_Learner": "mlp",
+    "Model": "MLC_PA",
+    "Fold": 4,
+    "Seed": 45
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.4759600403106128,
+    "Full_Micro_F1": 0.6471600688468159,
+    "Full_Example_F1": 0.6239557226399333,
+    "Hamming_Loss": 0.2997076023391813,
+    "Subset_Accuracy": 0.10526315789473684,
+    "Selective_Macro_F1": 0.44008777789872316,
+    "Selective_Micro_F1": 0.7261538461538461,
+    "Selective_Hamming_Loss": 0.21140142517814728,
+    "Generalized_Loss": 0.24546783625730992,
+    "Coverage": 0.6154970760233918,
+    "ABS": 0.9298245614035088,
+    "AABS": 0.3845029239766082,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.5883664999983012,
+    "Predict_Time_s": 0.029458900000463473
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "L1",
+      "Group": "NA",
+      "Train_Positives": 271,
+      "Train_Negatives": 170,
+      "Test_Positives": 67,
+      "Test_Negatives": 47,
+      "TP": 26,
+      "FP": 14,
+      "FN": 1,
+      "TN": 0,
+      "Abstained_Positive": 40,
+      "Abstained_Negative": 33,
+      "Coverage": 0.35964912280701755,
+      "Selective_F1_Positive": 0.7761194029850746,
+      "Selective_F1_Negative": 0.0,
+      "Full_F1": 0.6711409395973155
+    },
+    {
+      "Label": 1,
+      "Label_Name": "L2",
+      "Group": "NA",
+      "Train_Positives": 140,
+      "Train_Negatives": 301,
+      "Test_Positives": 34,
+      "Test_Negatives": 80,
+      "TP": 0,
+      "FP": 1,
+      "FN": 13,
+      "TN": 57,
+      "Abstained_Positive": 21,
+      "Abstained_Negative": 22,
+      "Coverage": 0.6228070175438597,
+      "Selective_F1_Positive": 0.0,
+      "Selective_F1_Negative": 0.890625,
+      "Full_F1": 0.27450980392156865
+    },
+    {
+      "Label": 2,
+      "Label_Name": "L3",
+      "Group": "NA",
+      "Train_Positives": 171,
+      "Train_Negatives": 270,
+      "Test_Positives": 43,
+      "Test_Negatives": 71,
+      "TP": 8,
+      "FP": 1,
+      "FN": 10,
+      "TN": 34,
+      "Abstained_Positive": 25,
+      "Abstained_Negative": 36,
+      "Coverage": 0.4649122807017544,
+      "Selective_F1_Positive": 0.5925925925925926,
+      "Selective_F1_Negative": 0.8607594936708861,
+      "Full_F1": 0.5714285714285714
+    },
+    {
+      "Label": 3,
+      "Label_Name": "L4",
+      "Group": "NA",
+      "Train_Positives": 12,
+      "Train_Negatives": 429,
+      "Test_Positives": 4,
+      "Test_Negatives": 110,
+      "TP": 0,
+      "FP": 0,
+      "FN": 4,
+      "TN": 110,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.0,
+      "Selective_F1_Negative": 0.9821428571428571,
+      "Full_F1": 0.0
+    },
+    {
+      "Label": 4,
+      "Label_Name": "L5",
+      "Group": "NA",
+      "Train_Positives": 214,
+      "Train_Negatives": 227,
+      "Test_Positives": 54,
+      "Test_Negatives": 60,
+      "TP": 6,
+      "FP": 8,
+      "FN": 8,
+      "TN": 13,
+      "Abstained_Positive": 40,
+      "Abstained_Negative": 39,
+      "Coverage": 0.30701754385964913,
+      "Selective_F1_Positive": 0.42857142857142855,
+      "Selective_F1_Negative": 0.6190476190476191,
+      "Full_F1": 0.49019607843137253
+    },
+    {
+      "Label": 5,
+      "Label_Name": "L6",
+      "Group": "NA",
+      "Train_Positives": 338,
+      "Train_Negatives": 103,
+      "Test_Positives": 84,
+      "Test_Negatives": 30,
+      "TP": 78,
+      "FP": 29,
+      "FN": 0,
+      "TN": 0,
+      "Abstained_Positive": 6,
+      "Abstained_Negative": 1,
+      "Coverage": 0.9385964912280702,
+      "Selective_F1_Positive": 0.8432432432432433,
+      "Selective_F1_Negative": 0.0,
+      "Full_F1": 0.8484848484848485
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.6145124716553289,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.31746031746031744,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.3877551020408163,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.027210884353741496,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.4852607709750567,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.7664399092970522,
+      "regime": "symmetric_chow"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "L1",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "L2",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "L3",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "L4",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "L5",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "L6",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "5a5e6d148fce628330ddf292155dfd7ab5d613534b537d5c6190099fd9a1d1d2",
+  "warnings": []
+}

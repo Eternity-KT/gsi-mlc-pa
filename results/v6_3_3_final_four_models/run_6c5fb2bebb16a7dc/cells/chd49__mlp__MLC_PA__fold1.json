@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "chd49",
+    "Base_Learner": "mlp",
+    "Model": "MLC_PA",
+    "Fold": 1,
+    "Seed": 42
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.5070395291323789,
+    "Full_Micro_F1": 0.6678200692041523,
+    "Full_Example_F1": 0.6313241813241814,
+    "Hamming_Loss": 0.2882882882882883,
+    "Subset_Accuracy": 0.14414414414414414,
+    "Selective_Macro_F1": 0.48800841182604054,
+    "Selective_Micro_F1": 0.7220447284345048,
+    "Selective_Hamming_Loss": 0.21588089330024815,
+    "Generalized_Loss": 0.24909909909909916,
+    "Coverage": 0.6051051051051051,
+    "ABS": 0.918918918918919,
+    "AABS": 0.3948948948948949,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.5735480999992433,
+    "Predict_Time_s": 0.015369599999758066
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "L1",
+      "Group": "NA",
+      "Train_Positives": 270,
+      "Train_Negatives": 174,
+      "Test_Positives": 68,
+      "Test_Negatives": 43,
+      "TP": 32,
+      "FP": 12,
+      "FN": 7,
+      "TN": 7,
+      "Abstained_Positive": 29,
+      "Abstained_Negative": 24,
+      "Coverage": 0.5225225225225225,
+      "Selective_F1_Positive": 0.7710843373493976,
+      "Selective_F1_Negative": 0.42424242424242425,
+      "Full_F1": 0.7050359712230215
+    },
+    {
+      "Label": 1,
+      "Label_Name": "L2",
+      "Group": "NA",
+      "Train_Positives": 139,
+      "Train_Negatives": 305,
+      "Test_Positives": 35,
+      "Test_Negatives": 76,
+      "TP": 7,
+      "FP": 2,
+      "FN": 13,
+      "TN": 46,
+      "Abstained_Positive": 15,
+      "Abstained_Negative": 28,
+      "Coverage": 0.6126126126126126,
+      "Selective_F1_Positive": 0.4827586206896552,
+      "Selective_F1_Negative": 0.8598130841121495,
+      "Full_F1": 0.49122807017543857
+    },
+    {
+      "Label": 2,
+      "Label_Name": "L3",
+      "Group": "NA",
+      "Train_Positives": 172,
+      "Train_Negatives": 272,
+      "Test_Positives": 42,
+      "Test_Negatives": 69,
+      "TP": 4,
+      "FP": 1,
+      "FN": 12,
+      "TN": 29,
+      "Abstained_Positive": 26,
+      "Abstained_Negative": 39,
+      "Coverage": 0.4144144144144144,
+      "Selective_F1_Positive": 0.38095238095238093,
+      "Selective_F1_Negative": 0.8169014084507042,
+      "Full_F1": 0.4266666666666667
+    },
+    {
+      "Label": 3,
+      "Label_Name": "L4",
+      "Group": "NA",
+      "Train_Positives": 13,
+      "Train_Negatives": 431,
+      "Test_Positives": 3,
+      "Test_Negatives": 108,
+      "TP": 0,
+      "FP": 0,
+      "FN": 3,
+      "TN": 108,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.0,
+      "Selective_F1_Negative": 0.9863013698630136,
+      "Full_F1": 0.0
+    },
+    {
+      "Label": 4,
+      "Label_Name": "L5",
+      "Group": "NA",
+      "Train_Positives": 214,
+      "Train_Negatives": 230,
+      "Test_Positives": 54,
+      "Test_Negatives": 57,
+      "TP": 5,
+      "FP": 4,
+      "FN": 8,
+      "TN": 13,
+      "Abstained_Positive": 41,
+      "Abstained_Negative": 40,
+      "Coverage": 0.2702702702702703,
+      "Selective_F1_Positive": 0.45454545454545453,
+      "Selective_F1_Negative": 0.6842105263157895,
+      "Full_F1": 0.5636363636363636
+    },
+    {
+      "Label": 5,
+      "Label_Name": "L6",
+      "Group": "NA",
+      "Train_Positives": 338,
+      "Train_Negatives": 106,
+      "Test_Positives": 84,
+      "Test_Negatives": 27,
+      "TP": 65,
+      "FP": 25,
+      "FN": 0,
+      "TN": 0,
+      "Abstained_Positive": 19,
+      "Abstained_Negative": 2,
+      "Coverage": 0.8108108108108109,
+      "Selective_F1_Positive": 0.8387096774193549,
+      "Selective_F1_Negative": 0.0,
+      "Full_F1": 0.8556701030927835
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.6081081081081081,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.3130630630630631,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.38738738738738737,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.02927927927927928,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.481981981981982,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.7612612612612613,
+      "regime": "symmetric_chow"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "L1",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "L2",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "L3",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "L4",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "L5",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "L6",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "ed3ee17b542032aeed8a22b7e41ee481f151bb3eea7202759e0b10476b533559",
+  "warnings": []
+}

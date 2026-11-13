@@ -1,0 +1,393 @@
+{
+  "run_id": "6c5fb2bebb16a7dc",
+  "status": "complete",
+  "created_utc": "2026-11-13T08:57:37.449743+00:00",
+  "source_commit": "bd26306193ca477e2e1e9e27ac8ad7e11c1f3069",
+  "source_branch": "main",
+  "source_dirty": false,
+  "identity": {
+    "config": {
+      "schema_version": 1,
+      "version": "v6.3.3-final-four-models",
+      "variant": "standard_no_samg",
+      "dataset_manifest": "configs/datasets_v6_3_3.json",
+      "datasets": [
+        "emotions",
+        "scene",
+        "yeast",
+        "chd49",
+        "music",
+        "gpositivepseaac",
+        "genbase",
+        "viruspseaac",
+        "plantpseaac",
+        "humanpseaac"
+      ],
+      "base_learners": [
+        "logistic",
+        "svm_calibrated",
+        "mlp"
+      ],
+      "models": [
+        "BR",
+        "CC",
+        "MLC_PA",
+        "GSI_v6_3_3"
+      ],
+      "cv": {
+        "outer_splits": 5,
+        "shuffle": true,
+        "random_state": 42,
+        "model_seed_rule": "random_state + fold_index_zero_based",
+        "inner_splits": 5,
+        "splitter": "iterstrat.ml_stratifiers.MultilabelStratifiedKFold"
+      },
+      "preprocessing": {
+        "scaler": "MaxAbsScaler",
+        "fit_scope": "outer_train_only"
+      },
+      "base_learner_config": "configs/experiment.json",
+      "marginal_estimator": "BinaryRelevanceClassifier_of_shared_binary_estimators",
+      "mlc_pa": {
+        "cost": 0.3,
+        "penalty": "linear",
+        "decision_policy": "hamming",
+        "abstain_value": -1
+      },
+      "gsi_common": {
+        "stratified_threshold": 0.75,
+        "residual_corr_threshold": 0.25,
+        "cv_folds": 5,
+        "max_peeling_depth": 3,
+        "peeling_metric": "selective_f1",
+        "decaying_threshold": true,
+        "threshold_decay_step": 0.05,
+        "aug_normalization": "matching",
+        "error_format": "residual",
+        "cost": 0.3,
+        "abstain_value": -1
+      },
+      "gsi_v6_3_3": {
+        "gamma_min": 0.7,
+        "use_prior_adaptive": true,
+        "calibrate_tail": true,
+        "calibration_method": "sqrt_platt",
+        "precision_guard": true,
+        "min_tau_1": 0.5,
+        "mf_alpha": 0.25,
+        "mf_z_max": 0.5,
+        "tau_balance": 0.85,
+        "blend_kappa": 20.0,
+        "tau_1_cap": 0.55,
+        "tau_0_floor": 0.45,
+        "separation_aware": false
+      },
+      "runtime": {
+        "torch_threads": 1,
+        "blas_threads": 1,
+        "deterministic_torch": true,
+        "allow_tf32": false,
+        "require_cuda_for_mlp": true,
+        "cublas_workspace_config": ":4096:8"
+      },
+      "evaluation": {
+        "primary_metric": "Selective_Macro_F1",
+        "zero_division": 0,
+        "all_abstain_label_f1": 0,
+        "std_ddof": 1,
+        "threshold_selection": "outer_training_data_only",
+        "aggregation": "mean_of_folds_then_equal_dataset_weight",
+        "coverage_target_scope": "OOF_training_only"
+      }
+    },
+    "config_sha256": "78406446967ab2550ae75edd34c54bf94afcfa54c047d11e52ee402be3563e46",
+    "source_files": {
+      "configs/ablation_run.json": "df236c86c778369ef15153f7b20350aa894ee3741161ebca6e5fc2a8136678af",
+      "configs/datasets_v6_3_3.json": "940d7022574d01b3480db1c6c79f271a0efe1e8315276c9b63a8352f4eea7737",
+      "configs/experiment.json": "cf6726d928e42fe4f10b0d0fbf26489e727260163e601c8388905e3de1f5f422",
+      "configs/full_run.json": "4036af255fcdc462f9d5307b924cc0d1a1004b02309f749ac66826a9bc61fd1e",
+      "configs/full_run_macro_f1.json": "fc207f2975d656e1d2769cf3cc6a7a9d667514d54b7dcba637c7b4a7ea0ca631",
+      "configs/label_policy.json": "8bf9e385530beb1f8b56f9ab284b7617bdb60ebab6d469665795dcf45ed73faa",
+      "configs/new_datasets_run.json": "f856cd281b3b13b34a8e1bd9ab2500a440d542f5f252bdfff411ca6c8b3abe30",
+      "configs/v4_small10_run.json": "4133f377f8a7fdcef13f2632339f4af9cf44bc732225648e69ab0cbd7e7e483f",
+      "configs/v5_small10_run.json": "d387e6f27d6a2d076cbb47c1145bd736685e06f2ccc630cb4ab368faefba8978",
+      "configs/v5_test_run.json": "bde270b2968d7bab56e968bdbfa0ae311a616a95691dba1681b7094198d5aa65",
+      "configs/v6_3_3_final.json": "78406446967ab2550ae75edd34c54bf94afcfa54c047d11e52ee402be3563e46",
+      "requirements-final.lock.txt": "2219c144c034ba374b44098ada753afde1958ab7742bceaa20ae775891465da4",
+      "scripts/run_v6_3_3_final.py": "e242ac9dcd481dbe77d942eb92c7924a979f0f217071e80060bc30f5d6fda764",
+      "scripts/validate_v6_3_3_datasets.py": "5e5494b0cc58de5790b32767476a7b070d39f9eb5e0307e66d016355d8784b09",
+      "scripts/verify_v6_3_3_results.py": "8dbf915e846dd83efcc1b98b6f3c0a642995e86ac8e87bf138511786769fb9f3",
+      "src/__init__.py": "43cb175af30addd6b597cf6840ff4d13be3781cc2a3be09fda24339e0257f826",
+      "src/calibration/adaptive_calibrator.py": "5d0df8a04c7a5734c7ab0d3c63b431b18e71aceed04ee1a6b0d6cee4c966ff3b",
+      "src/calibration/tail_calibrator.py": "01e45130915dcacb685e971b9bac0a0e8a9db0a54e8cae93d5378bafb65e48d1",
+      "src/data/__init__.py": "b053519e5ca2a91c16edea90297eb3c0e1addad2d4a8c5abff69138590c5057c",
+      "src/data/loader.py": "4528e080d3e1639586ca91e580e63191ea1b7487a8b2c1703179fa8d9dced90b",
+      "src/decision/__init__.py": "420e9c6370dfcd8b4116934f1ec77edb4c721a2192a87731346fa2c2dbfb146f",
+      "src/decision/base.py": "00b24994568fa1444651216d24cf3bc898e441b272088d8b8ecc50470addab87",
+      "src/decision/boundary.py": "edfa40fec8dcc189eb12dc44663ff382aebc60277d8dd84607c6245ddaeac950",
+      "src/decision/configuration.py": "246075705c544d73090cafa64d8ac92b332f867249957d61eacf090fa6ea7774",
+      "src/decision/count_distribution.py": "0e4a2c83b5bbff189032a3fba2b486b3d6c8df0612ff88bf354ccf683ef479d8",
+      "src/decision/fbeta.py": "8f8a5911fb7b2ed0eeaa37807e28bcc9c2ea81e47a045d537e25692a329c8e85",
+      "src/decision/hamming.py": "211becc2d0e0bcb04d7cc2a393136c53ba29ed00edd90196e8afe5f3a3a115d7",
+      "src/decision/jaccard.py": "50ac66e8cbe7645e5c46f146ca27cd1542f5e25d24d090fb60220b1b443d1203",
+      "src/decision/macro_f1.py": "f8b4dd7b9606c4f06b141d9c8192bea72bdd418ede7862be5aeb47ebfb8026a1",
+      "src/decision/registry.py": "fccc79e261c79977c0e7f5a71a2ab5547b13280f58e935adda7f934b11500e3a",
+      "src/evaluation/__init__.py": "7e8ad649bafb36e28a4c4aaaf480e8d9c10556782aeda9a4de343c5f74a1da97",
+      "src/evaluation/abstention_metrics.py": "58639d1aeffad6933c3db4bcc35403b869c92c0be3d59af11f5e7c0332339359",
+      "src/evaluation/cache.py": "411004019ad87a548f35e67ece8769805ee611b8183ef656522ac22a6ee11a28",
+      "src/evaluation/cache_v3.py": "3fda44beec5998cd4b73999d846e9f9cacd34da8d488afe61708fdac3cde32b4",
+      "src/evaluation/calibration_metrics.py": "5c15e00159ff67d57d0b7d607f6115b35f400c7b8fd87a0db600e4b2028d455d",
+      "src/evaluation/complete_metrics.py": "ded89e425e7be6f51b4b7269be5f9c2ae66ce4564806bfcf7ab3a83802db3d1c",
+      "src/evaluation/cv.py": "49b7188bca1d1c7325f5508a3ec00daee5c4bc26e1054bcda0a56b6850d7c0f8",
+      "src/evaluation/deployment.py": "1250419b74d2b8595e89f19b7fe23fe18cffd7d48c65318706bc86a95708ffe4",
+      "src/evaluation/export_v3.py": "94aab2841783b173349dcc98c32b137b1c9f0f19614a48821f2b05bc0460e1ab",
+      "src/evaluation/group_metrics.py": "e118150796d8ab4ef0c102fc152a6dc3c1f9b90b8cc469a2b881ecd519bb7577",
+      "src/evaluation/label_policy.py": "eb3004d80e3ce2b4def46e8f152f959d429e944cc5462956422297668bf8467f",
+      "src/evaluation/layer_ablation.py": "efc3b241f923f3d138720933781ab8254491cd3458f173b90f1ab2d00843afc2",
+      "src/evaluation/metric_contract.py": "9dacb3809a673d92c6ca771673383cec67474120afa7a511f2eca4a9718b2ef9",
+      "src/evaluation/metric_facade.py": "b54a7c9c970b9543741a2df8c4ac1923c1291b59a5f1b9ee1ace44971cb5a7a5",
+      "src/evaluation/metric_utils.py": "a8d7498c32f620a1ac7ac93910ce4694684dd7b962c218d3096375d87a381198",
+      "src/evaluation/metrics.py": "95a5d8dc585dbabea65165b7d1a0278e797712e70668bc28cc37df96b4531055",
+      "src/evaluation/pipeline_v3.py": "47d78bf417f25004de2c6899aff8f4b610c5c73c8d54c0c304154ae1d8098956",
+      "src/models/__init__.py": "5699942846fb9caeaf1aca1ed3e3883a82b5463e4b8b63f38e37f3e088df33a4",
+      "src/models/base_learners.py": "d61649ad2b52ee64a4328129994defb270ec29819ccb0f0bcb24fcfa70907078",
+      "src/models/binary_relevance.py": "12d4793396d2e9f9d71875cf05e417b5d634a094c1d3dfdd21c643dff1876155",
+      "src/models/classifier_chain.py": "5df1cb21c0920a16267774e2b83eddc2fd253421b8b9503f8c4d824deea0e059",
+      "src/models/ensemble_classifier_chain.py": "4a463d24b9b6cf1bd17fc3e083c99054966bf2fa02cb71a635f8b0c22b276f13",
+      "src/models/gsi_mlc_pa.py": "28b857b04ef451bfababd7462a092018f90ff0b84c20df941220afd4be05346d",
+      "src/models/gsi_v6_3_3.py": "ed6a733cf9275903d4b0fe6d3868a1784c2812c01a1164c1b66bdaa57bbc3290",
+      "src/models/mlc_pa.py": "8d9c1ad9d44da3f418c473eff414a9d9f9bf662ca7763e699e192cbf44dbcf28",
+      "src/models/probability_adapter.py": "3cb12401c7c94862fc3a5e5621f7fcd6e38c579ddc2573c9f1e612e7b5684fbb",
+      "src/models/pytorch_mlp.py": "7a33ca6e8420da2fef69f8ab4931f939cfa06ff15f56f18ace7efe9374d94a5d",
+      "src/models/registry.py": "c1d01737a7219c083274d177f8ac659706645097e8827eb6592ba83ca92b862f",
+      "src/models/sparse_chain.py": "d823dcf2499c0b4fde3c3f136205b06fff72e15921b00c86d9350908e0c4e99f",
+      "src/selection/__init__.py": "246c7a9f0abe9974b6d8a372489929ef8799f97cca8a08232a068c8ff2fb5c4c",
+      "src/selection/br_residual_correlation.py": "540503ffb9ade6116398bd20b85a0ddb5d8a4fcbc973f951fc734ac3aa1463ed",
+      "src/selection/complexity_penalty.py": "e67bbd8b64dc2115cbec61309c77b80d6ea1b80cd972ed0435d13cf998a450ca",
+      "src/selection/cv_peeling.py": "b29fb9ad608a5270d41d849357f848014b6b16f3361fd019fe55d23707065b46",
+      "src/selection/model_aware_correlation.py": "00d8290831802bba49062a25647818ba121abaa10271dc9668139857e427f285",
+      "src/selection/objectives.py": "5597f580f86fcee37a4741172ca2f92bec95ca98e1ae9406e8aefd19ace6d62b",
+      "src/selection/partition.py": "ba5d0946838addc584bad3c2efb68e7f60cbb1ca47d276f316c270fd20aea01f",
+      "src/selection/stratified_peeling.py": "46acd367b555e28acf07b6aa0c679bb883b549072d12157f686360ffe4cdde40",
+      "src/selection/tri_regime_decision.py": "2c27c8fa318a9ff2ce79d95d26fcf5b9e31736b97a71c93f7ba9379f88d81fe2",
+      "src/visualization/__init__.py": "9a9efd9878588501b3d979d646a67f65a7d3d91009876e5cf83af58a3f228a79",
+      "src/visualization/deployment.py": "f931fea332c6f867ee909c38a0d12f57be9065e4d9d33fbfb2cae2caf887eed5",
+      "src/visualization/plots.py": "885071cc849b45d5aca660ee7160a7010030a857f0a7b02fbcffc652a62f4bd2"
+    },
+    "environment": {
+      "python": "3.13.14",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "packages": {
+        "numpy": "2.3.4",
+        "pandas": "2.3.3",
+        "scipy": "1.16.3",
+        "scikit-learn": "1.7.2",
+        "iterative-stratification": "0.1.9",
+        "liac-arff": "2.5.0",
+        "torch": "2.6.0+cu124",
+        "threadpoolctl": "3.6.0"
+      },
+      "cuda_available": true,
+      "cuda_version": "12.4",
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+    },
+    "data_manifest_sha256": "940d7022574d01b3480db1c6c79f271a0efe1e8315276c9b63a8352f4eea7737",
+    "base_learner_config": {
+      "schema_version": 1,
+      "base_learners": {
+        "logistic": {
+          "backend": "sklearn.linear_model.LogisticRegression",
+          "binary_parameters": {
+            "C": 1.0,
+            "solver": "liblinear",
+            "tol": 0.001,
+            "max_iter": 1000
+          }
+        },
+        "mlp": {
+          "backend": "pytorch",
+          "binary_class": "src.models.pytorch_mlp.FastPyTorchBinaryMLP",
+          "multilabel_class": "src.models.pytorch_mlp.MultiLabelMLPClassifier",
+          "binary_parameters": {
+            "hidden_layer_sizes": [
+              64
+            ],
+            "lr": 0.001,
+            "weight_decay": 0.001,
+            "epochs": 30,
+            "unbias_pos_weight": false,
+            "calibration": "sigmoid"
+          },
+          "multilabel_parameters": {
+            "hidden_layer_sizes": [
+              128,
+              64
+            ],
+            "lr": 0.001,
+            "weight_decay": 0.001,
+            "epochs": 30,
+            "dropout": 0.15,
+            "pos_weight_clamp": 15.0,
+            "unbias_pos_weight": false,
+            "calibration": "sigmoid"
+          }
+        },
+        "svm_raw": {
+          "backend": "sklearn.svm.LinearSVC",
+          "status": "legacy_uncalibrated",
+          "binary_parameters": {
+            "C": 1.0,
+            "dual": "auto",
+            "tol": 0.001,
+            "max_iter": 5000
+          }
+        },
+        "mlp_sklearn": {
+          "backend": "sklearn.neural_network.MLPClassifier",
+          "status": "explicit_legacy_backend",
+          "binary_parameters": {
+            "hidden_layer_sizes": [
+              100
+            ],
+            "activation": "relu",
+            "solver": "adam",
+            "alpha": 0.0001,
+            "max_iter": 200,
+            "early_stopping": false,
+            "tol": 0.0001,
+            "n_iter_no_change": 10
+          }
+        },
+        "svm_calibrated": {
+          "backend": "sklearn.svm.LinearSVC+CalibratedClassifierCV",
+          "binary_parameters": {
+            "C": 1.0,
+            "dual": "auto",
+            "tol": 0.001,
+            "max_iter": 5000
+          },
+          "calibration": {
+            "method": "sigmoid",
+            "cv": 3,
+            "rare_label_strategy": "smoothed_prior",
+            "scope": "nested_in_training_fold"
+          }
+        }
+      },
+      "models": {
+        "BR_Logistic": {
+          "family": "BR",
+          "base_learner": "logistic"
+        },
+        "BR_MLP": {
+          "family": "BR",
+          "base_learner": "mlp"
+        },
+        "CC_Logistic": {
+          "family": "CC",
+          "base_learner": "logistic"
+        },
+        "CC_MLP": {
+          "family": "CC",
+          "base_learner": "mlp"
+        },
+        "MLC_PA_Logistic": {
+          "family": "MLC_PA",
+          "base_learner": "logistic"
+        },
+        "MLC_PA_MLP": {
+          "family": "MLC_PA",
+          "base_learner": "mlp"
+        },
+        "GSI_MLC_PA_Logistic": {
+          "family": "GSI_MLC_PA",
+          "base_learner": "logistic"
+        },
+        "GSI_MLC_PA_MLP": {
+          "family": "GSI_MLC_PA",
+          "base_learner": "mlp"
+        },
+        "BR_SVM": {
+          "family": "BR",
+          "base_learner": "svm_calibrated"
+        },
+        "CC_SVM": {
+          "family": "CC",
+          "base_learner": "svm_calibrated"
+        },
+        "MLC_PA_SVM": {
+          "family": "MLC_PA",
+          "base_learner": "svm_calibrated"
+        },
+        "GSI_MLC_PA_SVM": {
+          "family": "GSI_MLC_PA",
+          "base_learner": "svm_calibrated"
+        }
+      },
+      "defaults": {
+        "logistic_mlp_model_ids": [
+          "BR_Logistic",
+          "BR_MLP",
+          "CC_Logistic",
+          "CC_MLP",
+          "MLC_PA_Logistic",
+          "MLC_PA_MLP",
+          "GSI_MLC_PA_Logistic",
+          "GSI_MLC_PA_MLP"
+        ],
+        "matched_model_ids": [
+          "BR_Logistic",
+          "BR_MLP",
+          "CC_Logistic",
+          "CC_MLP",
+          "MLC_PA_Logistic",
+          "MLC_PA_MLP",
+          "GSI_MLC_PA_Logistic",
+          "GSI_MLC_PA_MLP",
+          "BR_SVM",
+          "CC_SVM",
+          "MLC_PA_SVM",
+          "GSI_MLC_PA_SVM"
+        ]
+      }
+    },
+    "selection": {
+      "datasets": [
+        "emotions",
+        "scene",
+        "yeast",
+        "chd49",
+        "music",
+        "gpositivepseaac",
+        "genbase",
+        "viruspseaac",
+        "plantpseaac",
+        "humanpseaac"
+      ],
+      "base_learners": [
+        "logistic",
+        "svm_calibrated",
+        "mlp"
+      ],
+      "folds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  "expected_cells": 600,
+  "completed_cells": 600,
+  "updated_utc": "2026-11-13T18:27:38.366897+00:00",
+  "last_completed": {
+    "Dataset": "humanpseaac",
+    "Base_Learner": "mlp",
+    "Model": "GSI_v6_3_3",
+    "Fold": 5,
+    "Seed": 46
+  },
+  "paused_utc": "2026-11-13T08:58:43.494738+00:00",
+  "completed_utc": "2026-11-13T18:27:39.875294+00:00"
+}

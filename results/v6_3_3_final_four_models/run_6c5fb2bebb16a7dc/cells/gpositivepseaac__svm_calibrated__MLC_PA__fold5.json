@@ -1,0 +1,179 @@
+{
+  "key": {
+    "Dataset": "gpositivepseaac",
+    "Base_Learner": "svm_calibrated",
+    "Model": "MLC_PA",
+    "Fold": 5,
+    "Seed": 46
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.3903913260219342,
+    "Full_Micro_F1": 0.5869565217391305,
+    "Full_Example_F1": 0.5048543689320388,
+    "Hamming_Loss": 0.18446601941747573,
+    "Subset_Accuracy": 0.46601941747572817,
+    "Selective_Macro_F1": 0.44365401332946974,
+    "Selective_Micro_F1": 0.6548672566371682,
+    "Selective_Hamming_Loss": 0.11641791044776119,
+    "Generalized_Loss": 0.15072815533980582,
+    "Coverage": 0.8131067961165048,
+    "ABS": 0.5728155339805825,
+    "AABS": 0.18689320388349515,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.24023900000065623,
+    "Predict_Time_s": 0.012991699999474804
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "Cell_membrane",
+      "Group": "NA",
+      "Train_Positives": 139,
+      "Train_Negatives": 277,
+      "Test_Positives": 35,
+      "Test_Negatives": 68,
+      "TP": 11,
+      "FP": 2,
+      "FN": 11,
+      "TN": 52,
+      "Abstained_Positive": 13,
+      "Abstained_Negative": 14,
+      "Coverage": 0.7378640776699029,
+      "Selective_F1_Positive": 0.6285714285714286,
+      "Selective_F1_Negative": 0.8888888888888888,
+      "Full_F1": 0.576271186440678
+    },
+    {
+      "Label": 1,
+      "Label_Name": "Cell_wall",
+      "Group": "NA",
+      "Train_Positives": 15,
+      "Train_Negatives": 401,
+      "Test_Positives": 3,
+      "Test_Negatives": 100,
+      "TP": 0,
+      "FP": 0,
+      "FN": 3,
+      "TN": 99,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 1,
+      "Coverage": 0.9902912621359223,
+      "Selective_F1_Positive": 0.0,
+      "Selective_F1_Negative": 0.9850746268656716,
+      "Full_F1": 0.0
+    },
+    {
+      "Label": 2,
+      "Label_Name": "Cytoplasm",
+      "Group": "NA",
+      "Train_Positives": 167,
+      "Train_Negatives": 249,
+      "Test_Positives": 41,
+      "Test_Negatives": 62,
+      "TP": 23,
+      "FP": 8,
+      "FN": 4,
+      "TN": 40,
+      "Abstained_Positive": 14,
+      "Abstained_Negative": 14,
+      "Coverage": 0.7281553398058253,
+      "Selective_F1_Positive": 0.7931034482758621,
+      "Selective_F1_Negative": 0.8695652173913043,
+      "Full_F1": 0.75
+    },
+    {
+      "Label": 3,
+      "Label_Name": "Extracell",
+      "Group": "NA",
+      "Train_Positives": 98,
+      "Train_Negatives": 318,
+      "Test_Positives": 25,
+      "Test_Negatives": 78,
+      "TP": 3,
+      "FP": 1,
+      "FN": 10,
+      "TN": 68,
+      "Abstained_Positive": 12,
+      "Abstained_Negative": 9,
+      "Coverage": 0.7961165048543689,
+      "Selective_F1_Positive": 0.35294117647058826,
+      "Selective_F1_Negative": 0.9251700680272109,
+      "Full_F1": 0.23529411764705882
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.33413461538461536,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.036057692307692304,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.4014423076923077,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.23557692307692307,
+      "regime": "symmetric_chow"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "Cell_membrane",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "Cell_wall",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "Cytoplasm",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "Extracell",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "d34547564ea89a5e5b4284c76680bd67d95aba3daadef6a37521d91e21e428e0",
+  "warnings": []
+}

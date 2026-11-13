@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "viruspseaac",
+    "Base_Learner": "mlp",
+    "Model": "BR",
+    "Fold": 5,
+    "Seed": 46
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.4558404558404558,
+    "Full_Micro_F1": 0.5208333333333334,
+    "Full_Example_F1": 0.4666666666666667,
+    "Hamming_Loss": 0.17037037037037037,
+    "Subset_Accuracy": 0.3333333333333333,
+    "Selective_Macro_F1": 0.4558404558404558,
+    "Selective_Micro_F1": 0.5208333333333334,
+    "Selective_Hamming_Loss": 0.17037037037037037,
+    "Generalized_Loss": 0.17037037037037037,
+    "Coverage": 1.0,
+    "ABS": 0.0,
+    "AABS": 0.0,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.5836225000002742,
+    "Predict_Time_s": 0.01287880000018049
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "Viral_capsid",
+      "Group": "NA",
+      "Train_Positives": 6,
+      "Train_Negatives": 156,
+      "Test_Positives": 2,
+      "Test_Negatives": 43,
+      "TP": 2,
+      "FP": 0,
+      "FN": 0,
+      "TN": 43,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 1.0,
+      "Selective_F1_Negative": 1.0,
+      "Full_F1": 1.0
+    },
+    {
+      "Label": 1,
+      "Label_Name": "Host_cell_membrane",
+      "Group": "NA",
+      "Train_Positives": 27,
+      "Train_Negatives": 135,
+      "Test_Positives": 6,
+      "Test_Negatives": 39,
+      "TP": 1,
+      "FP": 2,
+      "FN": 5,
+      "TN": 37,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.2222222222222222,
+      "Selective_F1_Negative": 0.9135802469135802,
+      "Full_F1": 0.2222222222222222
+    },
+    {
+      "Label": 2,
+      "Label_Name": "Host_endoplasm_reticulum",
+      "Group": "NA",
+      "Train_Positives": 16,
+      "Train_Negatives": 146,
+      "Test_Positives": 4,
+      "Test_Negatives": 41,
+      "TP": 1,
+      "FP": 1,
+      "FN": 3,
+      "TN": 40,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.3333333333333333,
+      "Selective_F1_Negative": 0.9523809523809523,
+      "Full_F1": 0.3333333333333333
+    },
+    {
+      "Label": 3,
+      "Label_Name": "Host_cytoplasm",
+      "Group": "NA",
+      "Train_Positives": 70,
+      "Train_Negatives": 92,
+      "Test_Positives": 17,
+      "Test_Negatives": 28,
+      "TP": 10,
+      "FP": 12,
+      "FN": 7,
+      "TN": 16,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.5128205128205128,
+      "Selective_F1_Negative": 0.6274509803921569,
+      "Full_F1": 0.5128205128205128
+    },
+    {
+      "Label": 4,
+      "Label_Name": "Host_nucleus",
+      "Group": "NA",
+      "Train_Positives": 67,
+      "Train_Negatives": 95,
+      "Test_Positives": 17,
+      "Test_Negatives": 28,
+      "TP": 11,
+      "FP": 5,
+      "FN": 6,
+      "TN": 23,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.6666666666666666,
+      "Selective_F1_Negative": 0.8070175438596491,
+      "Full_F1": 0.6666666666666666
+    },
+    {
+      "Label": 5,
+      "Label_Name": "Secreted",
+      "Group": "NA",
+      "Train_Positives": 16,
+      "Train_Negatives": 146,
+      "Test_Positives": 4,
+      "Test_Negatives": 41,
+      "TP": 0,
+      "FP": 1,
+      "FN": 4,
+      "TN": 40,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.0,
+      "Selective_F1_Negative": 0.9411764705882353,
+      "Full_F1": 0.0
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.037037037037037035,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.16666666666666666,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.09876543209876543,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.43209876543209874,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.41358024691358025,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.09876543209876543,
+      "regime": "native_binary"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "Viral_capsid",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "Host_cell_membrane",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "Host_endoplasm_reticulum",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "Host_cytoplasm",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "Host_nucleus",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "Secreted",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "6cf1aa52a5fcb01af02b456e03f957a09c8425d0e3b96fc3e41431652c8fb427",
+  "warnings": []
+}

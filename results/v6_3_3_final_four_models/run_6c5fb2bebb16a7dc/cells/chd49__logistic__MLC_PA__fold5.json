@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "chd49",
+    "Base_Learner": "logistic",
+    "Model": "MLC_PA",
+    "Fold": 5,
+    "Seed": 46
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.492142597189168,
+    "Full_Micro_F1": 0.6527050610820244,
+    "Full_Example_F1": 0.6352164502164502,
+    "Hamming_Loss": 0.3015151515151515,
+    "Subset_Accuracy": 0.12727272727272726,
+    "Selective_Macro_F1": 0.5106577229403316,
+    "Selective_Micro_F1": 0.7249190938511327,
+    "Selective_Hamming_Loss": 0.20531400966183574,
+    "Generalized_Loss": 0.24060606060606057,
+    "Coverage": 0.6272727272727273,
+    "ABS": 0.9090909090909091,
+    "AABS": 0.37272727272727274,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.031272800000806456,
+    "Predict_Time_s": 0.005401899999924353
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "L1",
+      "Group": "NA",
+      "Train_Positives": 270,
+      "Train_Negatives": 175,
+      "Test_Positives": 68,
+      "Test_Negatives": 42,
+      "TP": 31,
+      "FP": 6,
+      "FN": 7,
+      "TN": 9,
+      "Abstained_Positive": 30,
+      "Abstained_Negative": 27,
+      "Coverage": 0.4818181818181818,
+      "Selective_F1_Positive": 0.8266666666666667,
+      "Selective_F1_Negative": 0.5806451612903226,
+      "Full_F1": 0.7092198581560284
+    },
+    {
+      "Label": 1,
+      "Label_Name": "L2",
+      "Group": "NA",
+      "Train_Positives": 139,
+      "Train_Negatives": 306,
+      "Test_Positives": 35,
+      "Test_Negatives": 75,
+      "TP": 10,
+      "FP": 6,
+      "FN": 11,
+      "TN": 52,
+      "Abstained_Positive": 14,
+      "Abstained_Negative": 17,
+      "Coverage": 0.7181818181818181,
+      "Selective_F1_Positive": 0.5405405405405406,
+      "Selective_F1_Negative": 0.859504132231405,
+      "Full_F1": 0.5079365079365079
+    },
+    {
+      "Label": 2,
+      "Label_Name": "L3",
+      "Group": "NA",
+      "Train_Positives": 171,
+      "Train_Negatives": 274,
+      "Test_Positives": 43,
+      "Test_Negatives": 67,
+      "TP": 3,
+      "FP": 3,
+      "FN": 11,
+      "TN": 35,
+      "Abstained_Positive": 29,
+      "Abstained_Negative": 29,
+      "Coverage": 0.4727272727272727,
+      "Selective_F1_Positive": 0.3,
+      "Selective_F1_Negative": 0.8333333333333334,
+      "Full_F1": 0.3380281690140845
+    },
+    {
+      "Label": 3,
+      "Label_Name": "L4",
+      "Group": "NA",
+      "Train_Positives": 13,
+      "Train_Negatives": 432,
+      "Test_Positives": 3,
+      "Test_Negatives": 107,
+      "TP": 0,
+      "FP": 0,
+      "FN": 3,
+      "TN": 106,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 1,
+      "Coverage": 0.990909090909091,
+      "Selective_F1_Positive": 0.0,
+      "Selective_F1_Negative": 0.986046511627907,
+      "Full_F1": 0.0
+    },
+    {
+      "Label": 4,
+      "Label_Name": "L5",
+      "Group": "NA",
+      "Train_Positives": 214,
+      "Train_Negatives": 231,
+      "Test_Positives": 54,
+      "Test_Negatives": 56,
+      "TP": 12,
+      "FP": 8,
+      "FN": 14,
+      "TN": 14,
+      "Abstained_Positive": 28,
+      "Abstained_Negative": 34,
+      "Coverage": 0.43636363636363634,
+      "Selective_F1_Positive": 0.5217391304347826,
+      "Selective_F1_Negative": 0.56,
+      "Full_F1": 0.5420560747663551
+    },
+    {
+      "Label": 5,
+      "Label_Name": "L6",
+      "Group": "NA",
+      "Train_Positives": 338,
+      "Train_Negatives": 107,
+      "Test_Positives": 84,
+      "Test_Negatives": 26,
+      "TP": 56,
+      "FP": 16,
+      "FN": 0,
+      "TN": 1,
+      "Abstained_Positive": 28,
+      "Abstained_Negative": 9,
+      "Coverage": 0.6636363636363637,
+      "Selective_F1_Positive": 0.875,
+      "Selective_F1_Negative": 0.1111111111111111,
+      "Full_F1": 0.8556149732620321
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.6067415730337079,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.31235955056179776,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.3842696629213483,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.029213483146067417,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.48089887640449436,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.7595505617977528,
+      "regime": "symmetric_chow"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "L1",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "L2",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "L3",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "L4",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "L5",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "L6",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "193373764253298cff03885fd2e5f8bcb6a91dec183a36ddcdb190dfa5ac6993",
+  "warnings": []
+}

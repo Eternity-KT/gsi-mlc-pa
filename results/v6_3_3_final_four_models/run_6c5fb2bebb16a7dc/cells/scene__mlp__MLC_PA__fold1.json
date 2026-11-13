@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "scene",
+    "Base_Learner": "mlp",
+    "Model": "MLC_PA",
+    "Fold": 1,
+    "Seed": 42
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.5710976434761601,
+    "Full_Micro_F1": 0.5677570093457944,
+    "Full_Example_F1": 0.44599860821155185,
+    "Hamming_Loss": 0.12874043145441894,
+    "Subset_Accuracy": 0.3465553235908142,
+    "Selective_Macro_F1": 0.5372532854000053,
+    "Selective_Micro_F1": 0.6306306306306306,
+    "Selective_Hamming_Loss": 0.06864796986186689,
+    "Generalized_Loss": 0.10768963117606124,
+    "Coverage": 0.8312456506610996,
+    "ABS": 0.6993736951983298,
+    "AABS": 0.1687543493389005,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.4967126999999891,
+    "Predict_Time_s": 0.021778799999083276
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "beach",
+      "Group": "NA",
+      "Train_Positives": 342,
+      "Train_Negatives": 1586,
+      "Test_Positives": 85,
+      "Test_Negatives": 394,
+      "TP": 29,
+      "FP": 6,
+      "FN": 24,
+      "TN": 353,
+      "Abstained_Positive": 32,
+      "Abstained_Negative": 35,
+      "Coverage": 0.860125260960334,
+      "Selective_F1_Positive": 0.6590909090909091,
+      "Selective_F1_Negative": 0.9592391304347826,
+      "Full_F1": 0.6285714285714286
+    },
+    {
+      "Label": 1,
+      "Label_Name": "sunset",
+      "Group": "NA",
+      "Train_Positives": 292,
+      "Train_Negatives": 1636,
+      "Test_Positives": 72,
+      "Test_Negatives": 407,
+      "TP": 42,
+      "FP": 4,
+      "FN": 15,
+      "TN": 389,
+      "Abstained_Positive": 15,
+      "Abstained_Negative": 14,
+      "Coverage": 0.9394572025052192,
+      "Selective_F1_Positive": 0.8155339805825242,
+      "Selective_F1_Negative": 0.9761606022584692,
+      "Full_F1": 0.7727272727272727
+    },
+    {
+      "Label": 2,
+      "Label_Name": "foliage",
+      "Group": "NA",
+      "Train_Positives": 317,
+      "Train_Negatives": 1611,
+      "Test_Positives": 80,
+      "Test_Negatives": 399,
+      "TP": 20,
+      "FP": 12,
+      "FN": 23,
+      "TN": 357,
+      "Abstained_Positive": 37,
+      "Abstained_Negative": 30,
+      "Coverage": 0.860125260960334,
+      "Selective_F1_Positive": 0.5333333333333333,
+      "Selective_F1_Negative": 0.9532710280373832,
+      "Full_F1": 0.5072463768115942
+    },
+    {
+      "Label": 3,
+      "Label_Name": "field",
+      "Group": "NA",
+      "Train_Positives": 346,
+      "Train_Negatives": 1582,
+      "Test_Positives": 87,
+      "Test_Negatives": 392,
+      "TP": 41,
+      "FP": 4,
+      "FN": 21,
+      "TN": 353,
+      "Abstained_Positive": 25,
+      "Abstained_Negative": 35,
+      "Coverage": 0.8747390396659708,
+      "Selective_F1_Positive": 0.7663551401869159,
+      "Selective_F1_Negative": 0.9658002735978112,
+      "Full_F1": 0.7012987012987013
+    },
+    {
+      "Label": 4,
+      "Label_Name": "mountain",
+      "Group": "NA",
+      "Train_Positives": 426,
+      "Train_Negatives": 1502,
+      "Test_Positives": 107,
+      "Test_Negatives": 372,
+      "TP": 3,
+      "FP": 1,
+      "FN": 28,
+      "TN": 288,
+      "Abstained_Positive": 76,
+      "Abstained_Negative": 83,
+      "Coverage": 0.6680584551148225,
+      "Selective_F1_Positive": 0.17142857142857143,
+      "Selective_F1_Negative": 0.9520661157024793,
+      "Full_F1": 0.34615384615384615
+    },
+    {
+      "Label": 5,
+      "Label_Name": "urban",
+      "Group": "NA",
+      "Train_Positives": 345,
+      "Train_Negatives": 1583,
+      "Test_Positives": 86,
+      "Test_Negatives": 393,
+      "TP": 5,
+      "FP": 2,
+      "FN": 24,
+      "TN": 345,
+      "Abstained_Positive": 57,
+      "Abstained_Negative": 46,
+      "Coverage": 0.7849686847599165,
+      "Selective_F1_Positive": 0.2777777777777778,
+      "Selective_F1_Negative": 0.9636871508379888,
+      "Full_F1": 0.47058823529411764
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.17738589211618258,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.15145228215767634,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.16441908713692946,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.17946058091286307,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.22095435684647302,
+      "regime": "symmetric_chow"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": 0.3,
+      "tau_1": 0.7,
+      "prior": 0.17894190871369295,
+      "regime": "symmetric_chow"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "beach",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "sunset",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "foliage",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "field",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "mountain",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "urban",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "ace797235f9de0532f691e0c67174054e3bbfdff595166c4447e7bddb85357a7",
+  "warnings": []
+}

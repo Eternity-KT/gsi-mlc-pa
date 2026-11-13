@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "chd49",
+    "Base_Learner": "logistic",
+    "Model": "BR",
+    "Fold": 5,
+    "Seed": 46
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.492142597189168,
+    "Full_Micro_F1": 0.6527050610820244,
+    "Full_Example_F1": 0.6352164502164502,
+    "Hamming_Loss": 0.3015151515151515,
+    "Subset_Accuracy": 0.12727272727272726,
+    "Selective_Macro_F1": 0.492142597189168,
+    "Selective_Micro_F1": 0.6527050610820244,
+    "Selective_Hamming_Loss": 0.3015151515151515,
+    "Generalized_Loss": 0.3015151515151515,
+    "Coverage": 1.0,
+    "ABS": 0.0,
+    "AABS": 0.0,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.018304200000784476,
+    "Predict_Time_s": 0.0014643000013165874
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "L1",
+      "Group": "NA",
+      "Train_Positives": 270,
+      "Train_Negatives": 175,
+      "Test_Positives": 68,
+      "Test_Negatives": 42,
+      "TP": 50,
+      "FP": 23,
+      "FN": 18,
+      "TN": 19,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.7092198581560284,
+      "Selective_F1_Negative": 0.4810126582278481,
+      "Full_F1": 0.7092198581560284
+    },
+    {
+      "Label": 1,
+      "Label_Name": "L2",
+      "Group": "NA",
+      "Train_Positives": 139,
+      "Train_Negatives": 306,
+      "Test_Positives": 35,
+      "Test_Negatives": 75,
+      "TP": 16,
+      "FP": 12,
+      "FN": 19,
+      "TN": 63,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.5079365079365079,
+      "Selective_F1_Negative": 0.802547770700637,
+      "Full_F1": 0.5079365079365079
+    },
+    {
+      "Label": 2,
+      "Label_Name": "L3",
+      "Group": "NA",
+      "Train_Positives": 171,
+      "Train_Negatives": 274,
+      "Test_Positives": 43,
+      "Test_Negatives": 67,
+      "TP": 12,
+      "FP": 16,
+      "FN": 31,
+      "TN": 51,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.3380281690140845,
+      "Selective_F1_Negative": 0.6845637583892618,
+      "Full_F1": 0.3380281690140845
+    },
+    {
+      "Label": 3,
+      "Label_Name": "L4",
+      "Group": "NA",
+      "Train_Positives": 13,
+      "Train_Negatives": 432,
+      "Test_Positives": 3,
+      "Test_Negatives": 107,
+      "TP": 0,
+      "FP": 1,
+      "FN": 3,
+      "TN": 106,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.0,
+      "Selective_F1_Negative": 0.9814814814814815,
+      "Full_F1": 0.0
+    },
+    {
+      "Label": 4,
+      "Label_Name": "L5",
+      "Group": "NA",
+      "Train_Positives": 214,
+      "Train_Negatives": 231,
+      "Test_Positives": 54,
+      "Test_Negatives": 56,
+      "TP": 29,
+      "FP": 24,
+      "FN": 25,
+      "TN": 32,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.5420560747663551,
+      "Selective_F1_Negative": 0.5663716814159292,
+      "Full_F1": 0.5420560747663551
+    },
+    {
+      "Label": 5,
+      "Label_Name": "L6",
+      "Group": "NA",
+      "Train_Positives": 338,
+      "Train_Negatives": 107,
+      "Test_Positives": 84,
+      "Test_Negatives": 26,
+      "TP": 80,
+      "FP": 23,
+      "FN": 4,
+      "TN": 3,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.8556149732620321,
+      "Selective_F1_Negative": 0.18181818181818182,
+      "Full_F1": 0.8556149732620321
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.6067415730337079,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.31235955056179776,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.3842696629213483,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.029213483146067417,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.48089887640449436,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.7595505617977528,
+      "regime": "native_binary"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "L1",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "L2",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "L3",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "L4",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "L5",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "L6",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "d50db72321dbccf03e09643b90691286a73264ea754428ab9019a5c425144766",
+  "warnings": []
+}

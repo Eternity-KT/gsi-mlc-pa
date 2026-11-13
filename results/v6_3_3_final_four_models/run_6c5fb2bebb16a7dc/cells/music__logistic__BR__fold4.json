@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "music",
+    "Base_Learner": "logistic",
+    "Model": "BR",
+    "Fold": 4,
+    "Seed": 45
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.6138917881455194,
+    "Full_Micro_F1": 0.6479591836734694,
+    "Full_Example_F1": 0.5789915966386555,
+    "Hamming_Loss": 0.19327731092436976,
+    "Subset_Accuracy": 0.2773109243697479,
+    "Selective_Macro_F1": 0.6138917881455194,
+    "Selective_Micro_F1": 0.6479591836734694,
+    "Selective_Hamming_Loss": 0.19327731092436976,
+    "Generalized_Loss": 0.19327731092436976,
+    "Coverage": 1.0,
+    "ABS": 0.0,
+    "AABS": 0.0,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.02514089999931457,
+    "Predict_Time_s": 0.002101300000504125
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "amazed-suprised",
+      "Group": "NA",
+      "Train_Positives": 138,
+      "Train_Negatives": 335,
+      "Test_Positives": 35,
+      "Test_Negatives": 84,
+      "TP": 18,
+      "FP": 14,
+      "FN": 17,
+      "TN": 70,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.5373134328358209,
+      "Selective_F1_Negative": 0.8187134502923976,
+      "Full_F1": 0.5373134328358209
+    },
+    {
+      "Label": 1,
+      "Label_Name": "happy-pleased",
+      "Group": "NA",
+      "Train_Positives": 133,
+      "Train_Negatives": 340,
+      "Test_Positives": 33,
+      "Test_Negatives": 86,
+      "TP": 4,
+      "FP": 2,
+      "FN": 29,
+      "TN": 84,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.20512820512820512,
+      "Selective_F1_Negative": 0.8442211055276382,
+      "Full_F1": 0.20512820512820512
+    },
+    {
+      "Label": 2,
+      "Label_Name": "relaxing-clam",
+      "Group": "NA",
+      "Train_Positives": 211,
+      "Train_Negatives": 262,
+      "Test_Positives": 53,
+      "Test_Negatives": 66,
+      "TP": 39,
+      "FP": 13,
+      "FN": 14,
+      "TN": 53,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.7428571428571429,
+      "Selective_F1_Negative": 0.7969924812030075,
+      "Full_F1": 0.7428571428571429
+    },
+    {
+      "Label": 3,
+      "Label_Name": "quiet-still",
+      "Group": "NA",
+      "Train_Positives": 119,
+      "Train_Negatives": 354,
+      "Test_Positives": 29,
+      "Test_Negatives": 90,
+      "TP": 23,
+      "FP": 4,
+      "FN": 6,
+      "TN": 86,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.8214285714285714,
+      "Selective_F1_Negative": 0.945054945054945,
+      "Full_F1": 0.8214285714285714
+    },
+    {
+      "Label": 4,
+      "Label_Name": "sad-lonely",
+      "Group": "NA",
+      "Train_Positives": 133,
+      "Train_Negatives": 340,
+      "Test_Positives": 34,
+      "Test_Negatives": 85,
+      "TP": 19,
+      "FP": 2,
+      "FN": 15,
+      "TN": 83,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.6909090909090909,
+      "Selective_F1_Negative": 0.907103825136612,
+      "Full_F1": 0.6909090909090909
+    },
+    {
+      "Label": 5,
+      "Label_Name": "angry-aggresive",
+      "Group": "NA",
+      "Train_Positives": 152,
+      "Train_Negatives": 321,
+      "Test_Positives": 37,
+      "Test_Negatives": 82,
+      "TP": 24,
+      "FP": 9,
+      "FN": 13,
+      "TN": 73,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.6857142857142857,
+      "Selective_F1_Negative": 0.8690476190476191,
+      "Full_F1": 0.6857142857142857
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.2917547568710359,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.28118393234672306,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.44608879492600423,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.25158562367864695,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.28118393234672306,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.321353065539112,
+      "regime": "native_binary"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "amazed-suprised",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "happy-pleased",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "relaxing-clam",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "quiet-still",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "sad-lonely",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "angry-aggresive",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "f85d9c0dd5db6c678096a1b87a62f8bdd58ea27cccc87cb3e5ec0178f646baac",
+  "warnings": []
+}

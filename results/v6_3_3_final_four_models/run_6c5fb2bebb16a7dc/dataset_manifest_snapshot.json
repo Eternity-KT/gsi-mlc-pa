@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "collection": "GSI-MLC-PA v6.3.3 final benchmark datasets",
+  "dataset_order": [
+    "emotions",
+    "scene",
+    "yeast",
+    "chd49",
+    "music",
+    "gpositivepseaac",
+    "genbase",
+    "viruspseaac",
+    "plantpseaac",
+    "humanpseaac"
+  ],
+  "datasets": {
+    "emotions": {
+      "format": "mulan_arff_xml",
+      "source": "Mulan multi-label dataset repository",
+      "source_url": "https://mulan.sourceforge.net/datasets-mlc.html",
+      "files": [
+        {
+          "path": "data/emotions/emotions.arff",
+          "bytes": 380476,
+          "sha256": "6f2f790047073d1293ac0872c0d55f2dc98b6177802fc96c6b66b309dfee1e4b"
+        },
+        {
+          "path": "data/emotions/emotions.xml",
+          "bytes": 332,
+          "sha256": "b20042828c32a6ca0a871c10a298c1b7b17fd2c453e944c1673d9e9b9bda1e68"
+        }
+      ],
+      "expected": {
+        "n_samples": 593,
+        "n_features": 72,
+        "n_labels": 6,
+        "label_cardinality": 1.8684654300168635,
+        "label_density": 0.31141090500281055,
+        "min_label_positives": 148,
+        "max_label_positives": 264,
+        "duplicate_rows": 0
+      }
+    },
+    "scene": {
+      "format": "meka_arff",
+      "source": "MEKA/Mulan multi-label dataset repositories",
+      "source_url": "https://waikato.github.io/meka/datasets/",
+      "files": [
+        {
+          "path": "data/Scene.arff",
+          "bytes": 6211008,
+          "sha256": "86f85335ffb59f439f3008c87c3d2832a74ab002213dc7d0b4414b9a6d657294"
+        }
+      ],
+      "expected": {
+        "n_samples": 2407,
+        "n_features": 294,
+        "n_labels": 6,
+        "label_cardinality": 1.0739509763190693,
+        "label_density": 0.17899182938651156,
+        "min_label_positives": 364,
+        "max_label_positives": 533,
+        "duplicate_rows": 7
+      },
+      "known_warnings": [
+        "Seven loaded rows are exact feature-and-label duplicates; retained for benchmark compatibility."
+      ]
+    },
+    "yeast": {
+      "format": "meka_arff",
+      "source": "MEKA/Mulan multi-label dataset repositories",
+      "source_url": "https://mulan.sourceforge.net/datasets-mlc.html",
+      "files": [
+        {
+          "path": "data/Yeast.arff",
+          "bytes": 2416708,
+          "sha256": "71ffb9a0992d01b3387ef72203f44fb006e51ff79ca00c3ed57bb5e04d154d6d"
+        }
+      ],
+      "expected": {
+        "n_samples": 2417,
+        "n_features": 103,
+        "n_labels": 14,
+        "label_cardinality": 4.237070748862226,
+        "label_density": 0.30264791063301616,
+        "min_label_positives": 34,
+        "max_label_positives": 1816,
+        "duplicate_rows": 0
+      }
+    },
+    "chd49": {
+      "format": "mat",
+      "source": "CHD inquiry diagnosis dataset distributed with the local source README",
+      "source_url": "http://levis.tongji.edu.cn/gzli/data/chd-data.zip",
+      "files": [
+        {
+          "path": "data/CHD_49/CHD_49.mat",
+          "bytes": 10041,
+          "sha256": "d25689591937a5507ef07c0be3f90b5e7784bb48772848d1da1800234f4f14c0"
+        }
+      ],
+      "expected": {
+        "n_samples": 555,
+        "n_features": 49,
+        "n_labels": 6,
+        "label_cardinality": 2.58018018018018,
+        "label_density": 0.43003003003003004,
+        "min_label_positives": 16,
+        "max_label_positives": 422,
+        "duplicate_rows": 0
+      }
+    },
+    "music": {
+      "format": "meka_arff",
+      "source": "MEKA Music.arff distribution",
+      "source_url": "https://sourceforge.net/projects/meka/files/Datasets/Music.arff/download",
+      "files": [
+        {
+          "path": "data/Music.arff",
+          "bytes": 382451,
+          "sha256": "7d089f62a9861c73e95b650f28b41565f9a694453de05fd7cf1727f093b4ecdd"
+        }
+      ],
+      "expected": {
+        "n_samples": 592,
+        "n_features": 71,
+        "n_labels": 6,
+        "label_cardinality": 1.8699324324324325,
+        "label_density": 0.31165540540540543,
+        "min_label_positives": 148,
+        "max_label_positives": 264,
+        "duplicate_rows": 0
+      },
+      "known_warnings": [
+        "Music and emotions have the same six semantic labels and overlapping feature names; treat them as related benchmark variants, not independent domains."
+      ]
+    },
+    "gpositivepseaac": {
+      "format": "pseaac_train_test_text",
+      "source": "LABIC PseAAC collection; Xu (Pattern Recognition, 2013)",
+      "source_url": "http://computer.njnu.edu.cn/Lab/LABIC/LABIC_index.html",
+      "files": [
+        {
+          "path": "data/GpositivePseAAC/Gram_positivePseAAC519-train.txt",
+          "bytes": 698201,
+          "sha256": "926d2c31234bbba9a69b7b0f5fc8a71a06be91f4e0fbfc924078e34aa2c2f73d"
+        },
+        {
+          "path": "data/GpositivePseAAC/Gram_positivePseAAC519-test.txt",
+          "bytes": 473547,
+          "sha256": "f4d4e0c880ea9f92e30d840298962f65d31c036d8bdd63cec0024c4d1a5c8f66"
+        }
+      ],
+      "expected": {
+        "n_samples": 519,
+        "n_features": 440,
+        "n_labels": 4,
+        "label_cardinality": 1.0077071290944124,
+        "label_density": 0.2519267822736031,
+        "min_label_positives": 18,
+        "max_label_positives": 208,
+        "duplicate_rows": 0
+      }
+    },
+    "genbase": {
+      "format": "mulan_arff_xml",
+      "source": "Mulan multi-label dataset repository",
+      "source_url": "https://mulan.sourceforge.net/datasets-mlc.html",
+      "files": [
+        {
+          "path": "data/genbase/genbase.arff",
+          "bytes": 3240153,
+          "sha256": "6dc772b94eac079eb9d6d6009915a1062612ced1cb5ed77004ae758737aec7fe"
+        },
+        {
+          "path": "data/genbase/genbase.xml",
+          "bytes": 992,
+          "sha256": "198e8a1d7070e9603119e02e626cedc589db7577339b307b06f5192047b69eb9"
+        }
+      ],
+      "transforms": {
+        "ignored_feature_names": [
+          "protein"
+        ],
+        "reason": "The raw nominal column contains one protein identifier per sample and is not a predictive motif/profile."
+      },
+      "expected": {
+        "n_samples": 662,
+        "n_features": 1185,
+        "n_labels": 27,
+        "label_cardinality": 1.2522658610271904,
+        "label_density": 0.04638021707508112,
+        "min_label_positives": 1,
+        "max_label_positives": 171,
+        "duplicate_rows": 455
+      },
+      "known_warnings": [
+        "After excluding the unique protein identifier, 455 rows duplicate an earlier motif/profile-and-label representation; retained for benchmark compatibility."
+      ]
+    },
+    "viruspseaac": {
+      "format": "pseaac_train_test_text",
+      "source": "LABIC PseAAC collection; Xu (Pattern Recognition, 2013)",
+      "source_url": "http://computer.njnu.edu.cn/Lab/LABIC/LABIC_index.html",
+      "files": [
+        {
+          "path": "data/VirusPseAAC/VirusPseAAC207-train.txt",
+          "bytes": 273569,
+          "sha256": "f5b7830ec5f782bcd7864e305aca16dece5ae3bdce331396886c9c33dc29da22"
+        },
+        {
+          "path": "data/VirusPseAAC/VirusPseAAC207-test.txt",
+          "bytes": 183124,
+          "sha256": "08fe2ff0c97cdc6404a34e800c5dccf25e7a8f4796b5019f02129b80bb75a5df"
+        }
+      ],
+      "expected": {
+        "n_samples": 207,
+        "n_features": 440,
+        "n_labels": 6,
+        "label_cardinality": 1.2173913043478262,
+        "label_density": 0.2028985507246377,
+        "min_label_positives": 8,
+        "max_label_positives": 87,
+        "duplicate_rows": 1
+      },
+      "known_warnings": [
+        "One loaded feature-and-label row is duplicated under distinct source identifiers; retained for benchmark compatibility."
+      ]
+    },
+    "plantpseaac": {
+      "format": "pseaac_train_test_text",
+      "source": "LABIC PseAAC collection; Xu (Pattern Recognition, 2013)",
+      "source_url": "http://computer.njnu.edu.cn/Lab/LABIC/LABIC_index.html",
+      "files": [
+        {
+          "path": "data/PlantPseAAC/PlantPseAAC978-train.txt",
+          "bytes": 1339316,
+          "sha256": "17fa1747b18bc479ac1bf29c4140fb4ae65c584021c42a5cb3f73b22f9ebb9fa"
+        },
+        {
+          "path": "data/PlantPseAAC/PlantPseAAC978-test.txt",
+          "bytes": 922650,
+          "sha256": "044a48e07ae0e3048bd7f7e585ecccf9d8d322e61b91b9257b423b279727f98f"
+        }
+      ],
+      "expected": {
+        "n_samples": 978,
+        "n_features": 440,
+        "n_labels": 12,
+        "label_cardinality": 1.0787321063394684,
+        "label_density": 0.08989434219495569,
+        "min_label_positives": 21,
+        "max_label_positives": 286,
+        "duplicate_rows": 0
+      }
+    },
+    "humanpseaac": {
+      "format": "pseaac_train_test_text",
+      "source": "LABIC PseAAC collection; Xu (Pattern Recognition, 2013)",
+      "source_url": "http://computer.njnu.edu.cn/Lab/LABIC/LABIC_index.html",
+      "files": [
+        {
+          "path": "data/HumanPseAAC/HumanPseAAC3106-train.txt",
+          "bytes": 4763626,
+          "sha256": "c65357cda49c290b2544c89e8c9b3c16154b88d841373dbc5b1449dcbd94c977"
+        },
+        {
+          "path": "data/HumanPseAAC/HumanPseAAC3106-test.txt",
+          "bytes": 3196124,
+          "sha256": "c5b00de9ed0e4d9bb3c90067adfeaf0ddb8344a26e0f678b6a9403183984d635"
+        }
+      ],
+      "expected": {
+        "n_samples": 3106,
+        "n_features": 440,
+        "n_labels": 14,
+        "label_cardinality": 1.185125563425628,
+        "label_density": 0.08465182595897341,
+        "min_label_positives": 22,
+        "max_label_positives": 1021,
+        "duplicate_rows": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "music",
+    "Base_Learner": "logistic",
+    "Model": "BR",
+    "Fold": 2,
+    "Seed": 43
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.5929062155588762,
+    "Full_Micro_F1": 0.635,
+    "Full_Example_F1": 0.5672364672364673,
+    "Hamming_Loss": 0.20797720797720798,
+    "Subset_Accuracy": 0.2905982905982906,
+    "Selective_Macro_F1": 0.5929062155588762,
+    "Selective_Micro_F1": 0.635,
+    "Selective_Hamming_Loss": 0.20797720797720798,
+    "Generalized_Loss": 0.20797720797720798,
+    "Coverage": 1.0,
+    "ABS": 0.0,
+    "AABS": 0.0,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.028028999999150983,
+    "Predict_Time_s": 0.0031439000013051555
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "amazed-suprised",
+      "Group": "NA",
+      "Train_Positives": 139,
+      "Train_Negatives": 336,
+      "Test_Positives": 34,
+      "Test_Negatives": 83,
+      "TP": 20,
+      "FP": 8,
+      "FN": 14,
+      "TN": 75,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.6451612903225806,
+      "Selective_F1_Negative": 0.872093023255814,
+      "Full_F1": 0.6451612903225806
+    },
+    {
+      "Label": 1,
+      "Label_Name": "happy-pleased",
+      "Group": "NA",
+      "Train_Positives": 133,
+      "Train_Negatives": 342,
+      "Test_Positives": 33,
+      "Test_Negatives": 84,
+      "TP": 2,
+      "FP": 5,
+      "FN": 31,
+      "TN": 79,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.1,
+      "Selective_F1_Negative": 0.8144329896907216,
+      "Full_F1": 0.1
+    },
+    {
+      "Label": 2,
+      "Label_Name": "relaxing-clam",
+      "Group": "NA",
+      "Train_Positives": 211,
+      "Train_Negatives": 264,
+      "Test_Positives": 53,
+      "Test_Negatives": 64,
+      "TP": 37,
+      "FP": 13,
+      "FN": 16,
+      "TN": 51,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.7184466019417476,
+      "Selective_F1_Negative": 0.7786259541984732,
+      "Full_F1": 0.7184466019417476
+    },
+    {
+      "Label": 3,
+      "Label_Name": "quiet-still",
+      "Group": "NA",
+      "Train_Positives": 118,
+      "Train_Negatives": 357,
+      "Test_Positives": 30,
+      "Test_Negatives": 87,
+      "TP": 24,
+      "FP": 3,
+      "FN": 6,
+      "TN": 84,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.8421052631578947,
+      "Selective_F1_Negative": 0.9491525423728814,
+      "Full_F1": 0.8421052631578947
+    },
+    {
+      "Label": 4,
+      "Label_Name": "sad-lonely",
+      "Group": "NA",
+      "Train_Positives": 134,
+      "Train_Negatives": 341,
+      "Test_Positives": 33,
+      "Test_Negatives": 84,
+      "TP": 16,
+      "FP": 9,
+      "FN": 17,
+      "TN": 75,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.5517241379310345,
+      "Selective_F1_Negative": 0.8522727272727273,
+      "Full_F1": 0.5517241379310345
+    },
+    {
+      "Label": 5,
+      "Label_Name": "angry-aggresive",
+      "Group": "NA",
+      "Train_Positives": 151,
+      "Train_Negatives": 324,
+      "Test_Positives": 38,
+      "Test_Negatives": 79,
+      "TP": 28,
+      "FP": 14,
+      "FN": 10,
+      "TN": 65,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.7,
+      "Selective_F1_Negative": 0.8441558441558441,
+      "Full_F1": 0.7
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.2926315789473684,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.28,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.4442105263157895,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.24842105263157896,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.28210526315789475,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.3178947368421053,
+      "regime": "native_binary"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "amazed-suprised",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "happy-pleased",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "relaxing-clam",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "quiet-still",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "sad-lonely",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "angry-aggresive",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "598ac9aa0f5cfacca59d0d35c40944ab946aefcfc25ecd704da19b1a76d4c8c3",
+  "warnings": []
+}

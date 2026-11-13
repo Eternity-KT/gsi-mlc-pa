@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "scene",
+    "Base_Learner": "logistic",
+    "Model": "BR",
+    "Fold": 1,
+    "Seed": 42
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.7130933796427547,
+    "Full_Micro_F1": 0.7085953878406709,
+    "Full_Example_F1": 0.6370911621433543,
+    "Hamming_Loss": 0.09672929714683368,
+    "Subset_Accuracy": 0.5511482254697286,
+    "Selective_Macro_F1": 0.7130933796427547,
+    "Selective_Micro_F1": 0.7085953878406709,
+    "Selective_Hamming_Loss": 0.09672929714683368,
+    "Generalized_Loss": 0.09672929714683368,
+    "Coverage": 1.0,
+    "ABS": 0.0,
+    "AABS": 0.0,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.6022976999993261,
+    "Predict_Time_s": 0.012379599998894264
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "beach",
+      "Group": "NA",
+      "Train_Positives": 342,
+      "Train_Negatives": 1586,
+      "Test_Positives": 85,
+      "Test_Negatives": 394,
+      "TP": 59,
+      "FP": 15,
+      "FN": 26,
+      "TN": 379,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.7421383647798742,
+      "Selective_F1_Negative": 0.9486858573216521,
+      "Full_F1": 0.7421383647798742
+    },
+    {
+      "Label": 1,
+      "Label_Name": "sunset",
+      "Group": "NA",
+      "Train_Positives": 292,
+      "Train_Negatives": 1636,
+      "Test_Positives": 72,
+      "Test_Negatives": 407,
+      "TP": 54,
+      "FP": 3,
+      "FN": 18,
+      "TN": 404,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.8372093023255814,
+      "Selective_F1_Negative": 0.9746682750301568,
+      "Full_F1": 0.8372093023255814
+    },
+    {
+      "Label": 2,
+      "Label_Name": "foliage",
+      "Group": "NA",
+      "Train_Positives": 317,
+      "Train_Negatives": 1611,
+      "Test_Positives": 80,
+      "Test_Negatives": 399,
+      "TP": 60,
+      "FP": 29,
+      "FN": 20,
+      "TN": 370,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.7100591715976331,
+      "Selective_F1_Negative": 0.9378960709759189,
+      "Full_F1": 0.7100591715976331
+    },
+    {
+      "Label": 3,
+      "Label_Name": "field",
+      "Group": "NA",
+      "Train_Positives": 346,
+      "Train_Negatives": 1582,
+      "Test_Positives": 87,
+      "Test_Negatives": 392,
+      "TP": 69,
+      "FP": 12,
+      "FN": 18,
+      "TN": 380,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.8214285714285714,
+      "Selective_F1_Negative": 0.9620253164556962,
+      "Full_F1": 0.8214285714285714
+    },
+    {
+      "Label": 4,
+      "Label_Name": "mountain",
+      "Group": "NA",
+      "Train_Positives": 426,
+      "Train_Negatives": 1502,
+      "Test_Positives": 107,
+      "Test_Negatives": 372,
+      "TP": 55,
+      "FP": 27,
+      "FN": 52,
+      "TN": 345,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.582010582010582,
+      "Selective_F1_Negative": 0.8972691807542262,
+      "Full_F1": 0.582010582010582
+    },
+    {
+      "Label": 5,
+      "Label_Name": "urban",
+      "Group": "NA",
+      "Train_Positives": 345,
+      "Train_Negatives": 1583,
+      "Test_Positives": 86,
+      "Test_Negatives": 393,
+      "TP": 41,
+      "FP": 13,
+      "FN": 45,
+      "TN": 380,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.5857142857142857,
+      "Selective_F1_Negative": 0.9290953545232273,
+      "Full_F1": 0.5857142857142857
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.17738589211618258,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.15145228215767634,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.16441908713692946,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.17946058091286307,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.22095435684647302,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.17894190871369295,
+      "regime": "native_binary"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "beach",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "sunset",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "foliage",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "field",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "mountain",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "urban",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "3b9e6d376f9a1d291f6a2907b33a924825be60efeeb243c9a0d79c4cea2d2c3f",
+  "warnings": []
+}

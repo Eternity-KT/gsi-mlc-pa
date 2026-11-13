@@ -1,0 +1,249 @@
+{
+  "key": {
+    "Dataset": "scene",
+    "Base_Learner": "mlp",
+    "Model": "BR",
+    "Fold": 4,
+    "Seed": 45
+  },
+  "metrics": {
+    "Full_Macro_F1": 0.5653642819248995,
+    "Full_Micro_F1": 0.5607264472190693,
+    "Full_Example_F1": 0.4487179487179487,
+    "Hamming_Loss": 0.1340956340956341,
+    "Subset_Accuracy": 0.3367983367983368,
+    "Selective_Macro_F1": 0.5653642819248995,
+    "Selective_Micro_F1": 0.5607264472190693,
+    "Selective_Hamming_Loss": 0.1340956340956341,
+    "Generalized_Loss": 0.1340956340956341,
+    "Coverage": 1.0,
+    "ABS": 0.0,
+    "AABS": 0.0,
+    "IL_Label_Count": 0,
+    "IL_Coverage": null,
+    "IL_Selective_Macro_F1": null,
+    "DL_Label_Count": 0,
+    "DL_Coverage": null,
+    "DL_Selective_Macro_F1": null,
+    "Fit_Time_s": 0.6167934000004607,
+    "Predict_Time_s": 0.01187709999976505
+  },
+  "per_label": [
+    {
+      "Label": 0,
+      "Label_Name": "beach",
+      "Group": "NA",
+      "Train_Positives": 342,
+      "Train_Negatives": 1584,
+      "Test_Positives": 85,
+      "Test_Negatives": 396,
+      "TP": 36,
+      "FP": 13,
+      "FN": 49,
+      "TN": 383,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.5373134328358209,
+      "Selective_F1_Negative": 0.9251207729468599,
+      "Full_F1": 0.5373134328358209
+    },
+    {
+      "Label": 1,
+      "Label_Name": "sunset",
+      "Group": "NA",
+      "Train_Positives": 291,
+      "Train_Negatives": 1635,
+      "Test_Positives": 73,
+      "Test_Negatives": 408,
+      "TP": 49,
+      "FP": 15,
+      "FN": 24,
+      "TN": 393,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.7153284671532847,
+      "Selective_F1_Negative": 0.9527272727272728,
+      "Full_F1": 0.7153284671532847
+    },
+    {
+      "Label": 2,
+      "Label_Name": "foliage",
+      "Group": "NA",
+      "Train_Positives": 318,
+      "Train_Negatives": 1608,
+      "Test_Positives": 79,
+      "Test_Negatives": 402,
+      "TP": 37,
+      "FP": 18,
+      "FN": 42,
+      "TN": 384,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.5522388059701493,
+      "Selective_F1_Negative": 0.927536231884058,
+      "Full_F1": 0.5522388059701493
+    },
+    {
+      "Label": 3,
+      "Label_Name": "field",
+      "Group": "NA",
+      "Train_Positives": 347,
+      "Train_Negatives": 1579,
+      "Test_Positives": 86,
+      "Test_Negatives": 395,
+      "TP": 55,
+      "FP": 11,
+      "FN": 31,
+      "TN": 384,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.7236842105263158,
+      "Selective_F1_Negative": 0.9481481481481482,
+      "Full_F1": 0.7236842105263158
+    },
+    {
+      "Label": 4,
+      "Label_Name": "mountain",
+      "Group": "NA",
+      "Train_Positives": 426,
+      "Train_Negatives": 1500,
+      "Test_Positives": 107,
+      "Test_Negatives": 374,
+      "TP": 31,
+      "FP": 23,
+      "FN": 76,
+      "TN": 351,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.38509316770186336,
+      "Selective_F1_Negative": 0.8764044943820225,
+      "Full_F1": 0.38509316770186336
+    },
+    {
+      "Label": 5,
+      "Label_Name": "urban",
+      "Group": "NA",
+      "Train_Positives": 345,
+      "Train_Negatives": 1581,
+      "Test_Positives": 86,
+      "Test_Negatives": 395,
+      "TP": 39,
+      "FP": 38,
+      "FN": 47,
+      "TN": 357,
+      "Abstained_Positive": 0,
+      "Abstained_Negative": 0,
+      "Coverage": 1.0,
+      "Selective_F1_Positive": 0.4785276073619632,
+      "Selective_F1_Negative": 0.8936170212765957,
+      "Full_F1": 0.4785276073619632
+    }
+  ],
+  "thresholds": [
+    {
+      "Label": 0,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.17757009345794392,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 1,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.15109034267912771,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 2,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.16510903426791276,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 3,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.1801661474558671,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 4,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.22118380062305296,
+      "regime": "native_binary"
+    },
+    {
+      "Label": 5,
+      "Full_Threshold": 0.5,
+      "SAMG": false,
+      "tau_0": null,
+      "tau_1": null,
+      "prior": 0.1791277258566978,
+      "regime": "native_binary"
+    }
+  ],
+  "partitions": [
+    {
+      "Label": 0,
+      "Label_Name": "beach",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 1,
+      "Label_Name": "sunset",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 2,
+      "Label_Name": "foliage",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 3,
+      "Label_Name": "field",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 4,
+      "Label_Name": "mountain",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    },
+    {
+      "Label": 5,
+      "Label_Name": "urban",
+      "Group": "NA",
+      "IL_Layer": null,
+      "Dependent_Parents": "[]"
+    }
+  ],
+  "prediction_sha256": "0cd14da4fdd5f564674b885ff03306dea01b84c463faf44ce012e9703ebd244a",
+  "warnings": []
+}
