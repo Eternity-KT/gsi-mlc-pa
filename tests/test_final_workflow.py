@@ -133,17 +133,19 @@ def checkpoint_run(tmp_path, monkeypatch):
 
 
 def test_identical_run_resumes_without_refitting(checkpoint_run):
-    execute, _, fitted = checkpoint_run
+    execute, config_path, fitted = checkpoint_run
+    model_count = len(json.loads(config_path.read_text(encoding="utf-8"))["models"])
     first = execute()
     before = prediction_state(first)
-    assert fitted["count"] == 6
+    assert fitted["count"] == model_count
     assert execute() == first
-    assert fitted["count"] == 6
+    assert fitted["count"] == model_count
     assert prediction_state(first) == before
 
 
 def test_changed_config_creates_new_run_and_preserves_previous_predictions(checkpoint_run):
     execute, config_path, fitted = checkpoint_run
+    model_count = len(json.loads(config_path.read_text(encoding="utf-8"))["models"])
     first = execute()
     before = prediction_state(first)
     config = json.loads(config_path.read_text(encoding="utf-8"))
@@ -151,15 +153,16 @@ def test_changed_config_creates_new_run_and_preserves_previous_predictions(check
     config_path.write_text(json.dumps(config), encoding="utf-8")
     second = execute()
     assert first != second
-    assert fitted["count"] == 12
+    assert fitted["count"] == 2 * model_count
     assert prediction_state(first) == before
 
 
 def test_corrupt_prediction_cannot_be_reused(checkpoint_run):
-    execute, _, fitted = checkpoint_run
+    execute, config_path, fitted = checkpoint_run
+    model_count = len(json.loads(config_path.read_text(encoding="utf-8"))["models"])
     first = execute()
     path = next((first / "predictions").glob("*__BR__*.npz"))
     path.write_bytes(b"corrupted checkpoint")
     with pytest.raises(ValueError, match="Checkpoint prediction mismatch"):
         execute()
-    assert fitted["count"] == 6
+    assert fitted["count"] == model_count
