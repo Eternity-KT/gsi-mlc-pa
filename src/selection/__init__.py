@@ -31,13 +31,6 @@ from .cv_peeling import (
     CVStratifiedPeelingSelector,
     evaluate_label_5fold_cv,
 )
-from .br_residual_correlation import (
-    build_residual_dependency_graph,
-    compute_br_residual_matrix,
-    compute_residual_pcc_matrix,
-    export_residual_correlation_audit_table,
-    one_step_normalized_mean_field,
-)
 from .tri_regime_decision import (
     apply_dual_coverage_guard,
     apply_tri_regime_abstention,
@@ -71,16 +64,9 @@ __all__ = [
     "CVPeelingResult",
     "CVStratifiedPeelingSelector",
     "evaluate_label_5fold_cv",
-    "compute_br_residual_matrix",
-    "compute_residual_pcc_matrix",
-    "build_residual_dependency_graph",
-    "export_residual_correlation_audit_table",
-    "one_step_normalized_mean_field",
     "compute_label_balance_factor",
     "compute_tri_regime_raw_thresholds",
     "apply_dual_coverage_guard",
     "compute_tri_regime_adaptive_thresholds_table",
     "apply_tri_regime_abstention",
 ]
-
-

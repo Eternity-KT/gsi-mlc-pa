@@ -20,14 +20,12 @@
   "mlc_pa": {"cost": 0.30, "penalty": "linear", "decision_policy": "hamming", "abstain_value": -1},
   "gsi_common": {
     "stratified_threshold": 0.75,
-    "residual_corr_threshold": 0.25,
     "cv_folds": 5,
     "max_peeling_depth": 3,
     "peeling_metric": "selective_f1",
     "decaying_threshold": true,
     "threshold_decay_step": 0.05,
     "aug_normalization": "matching",
-    "error_format": "residual",
     "cost": 0.30,
     "abstain_value": -1
   },
@@ -38,8 +36,6 @@
     "calibration_method": "sqrt_platt",
     "precision_guard": true,
     "min_tau_1": 0.50,
-    "mf_alpha": 0.25,
-    "mf_z_max": 0.50,
     "tau_balance": 0.85,
     "blend_kappa": 20.0,
     "tau_1_cap": 0.55,

@@ -5,10 +5,11 @@ classification with partial abstention. It provides the GSI-MLC-PA method,
 reference baselines, dataset loaders, cross-validation procedures, evaluation
 metrics and saved predictions used in the experiments.
 
-GSI-MLC-PA identifies independent labels through out-of-fold evaluation,
-models dependent labels using residual correlations, and applies calibrated
-probability thresholds to accept or abstain from individual label decisions.
-Each prediction is positive, negative or abstained.
+GSI-MLC-PA discovers high-confidence **Anchor Labels (AL)** through out-of-fold
+evaluation, predicts remaining **Contextual Labels (CL)** conditioned on Anchor
+probability context, and applies unified identity-regularized balanced-root
+calibration with adaptive Tri-Regime thresholds to accept or abstain from
+individual label decisions. Each prediction is positive, negative or abstained.
 
 The repository supports reproducing the benchmark and checking reported
 metrics directly against saved out-of-sample predictions.
@@ -125,14 +126,22 @@ disabled TF32.
 
 ## Run experiments
 
-Run the four final models on Emotions with Logistic Regression across five
-folds (**20 fits**):
+By default, `scripts/run_experiments.py` **freezes and reuses** the verified
+`BR`, `CC`, and `MLC_PA` predictions from `results/v6_3_3_final_four_models/run_6c5fb2bebb16a7dc`
+(checking fold indices, configuration compatibility, and SHA-256 prediction
+checksums) and **only fits `GSI_v6_3_3`** (**150 active fits** across all 10
+datasets × 3 base learners × 5 folds, while still generating complete 4-model
+comparison tables). Pass `--retrain-baselines` to refit all 600 models from
+scratch.
+
+Run on Emotions with Logistic Regression across five folds (**5 active GSI fits**,
+15 frozen baseline cells):
 
 ```powershell
 .\.venv-final\Scripts\python.exe scripts/run_experiments.py --datasets emotions --base-learners logistic
 ```
 
-Run the complete benchmark:
+Run the complete benchmark (**150 active GSI fits** + 450 frozen baseline cells):
 
 ```powershell
 .\.venv-final\Scripts\python.exe scripts/run_experiments.py
@@ -203,7 +212,7 @@ prediction validity and metrics recomputed from the saved predictions.
 | `overall_summary.csv` | Equally weighted dataset means for each learner/model pair |
 | `per_label_folds.csv` | Label support, confusion counts, coverage and F1 |
 | `thresholds_audit.csv` | Per-label acceptance and rejection thresholds |
-| `partitions_audit.csv` | Independent/dependent label membership |
+| `partitions_audit.csv` | Anchor (AL) and Contextual (CL) label membership |
 | `predictions/*.npz` | Test indices, truth, probabilities, predictions and scaler state |
 | `cells/*.json` | Per-fit checkpoints, metrics and recorded warnings |
 | `fold_indices.json` | Original training/test row indices |

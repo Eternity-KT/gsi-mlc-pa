@@ -64,7 +64,8 @@ def verify(run_dir, check_source=True):
     selection = identity["selection"]
     config = identity["config"]
     columns = ["Dataset", "Base_Learner", "Model", "Fold"]
-    expected_keys = set(itertools.product(selection["datasets"], selection["base_learners"], config["models"], selection["folds"]))
+    selected_models = selection.get("models", config["models"])
+    expected_keys = set(itertools.product(selection["datasets"], selection["base_learners"], selected_models, selection["folds"]))
     require(len(detailed) == expected == len(expected_keys), "Incorrect number of detailed rows")
     require(set(detailed[columns].itertuples(index=False, name=None)) == expected_keys, "Model/dataset/fold coverage differs")
     cells = sorted((run_dir / "cells").glob("*.json"))
@@ -94,7 +95,7 @@ def verify(run_dir, check_source=True):
                 require(decided_count + label["Abstained_Positive"] + label["Abstained_Negative"] == len(truth), f"Confusion count mismatch: {path.name}")
         warnings_count += len(cell["warnings"])
 
-    expected_label_rows = sum(dataset_manifest["datasets"][d]["expected"]["n_labels"] for d in selection["datasets"]) * len(selection["base_learners"]) * len(config["models"]) * len(selection["folds"])
+    expected_label_rows = sum(dataset_manifest["datasets"][d]["expected"]["n_labels"] for d in selection["datasets"]) * len(selection["base_learners"]) * len(selected_models) * len(selection["folds"])
     require(len(per_label) == len(thresholds) == len(partitions) == expected_label_rows, "Incomplete per-label audits")
     require(not thresholds["SAMG"].any(), "SAMG unexpectedly enabled")
     require(not detailed.duplicated(columns).any(), "Duplicate benchmark cells")

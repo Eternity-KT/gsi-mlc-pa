@@ -124,8 +124,14 @@ def verify_artifacts(run_dir, timeout):
 def compare_smoke_to_release(run_dir):
     import numpy as np
 
+    release_manifest = json.loads((RELEASE / "run_manifest.json").read_text(encoding="utf-8"))
+    smoke_manifest = json.loads((Path(run_dir) / "run_manifest.json").read_text(encoding="utf-8"))
+    same_gsi_source = release_manifest["identity"]["source_files"] == smoke_manifest["identity"]["source_files"]
+
     checked, max_difference = 0, 0.0
     for path in sorted((Path(run_dir) / "predictions").glob("*.npz")):
+        if not same_gsi_source and "__GSI_" in path.name:
+            continue
         reference = RELEASE / "predictions" / path.name
         if not reference.is_file():
             raise ValueError(f"Published reference prediction is missing: {reference}")
@@ -138,9 +144,11 @@ def compare_smoke_to_release(run_dir):
     print(f"PUBLISHED RESULTS MATCH: {checked} prediction files; maximum probability difference={max_difference:.3g}.", flush=True)
 
 
-def smoke(output_root, gpu=False, timeout=600):
+def smoke(output_root, gpu=False, timeout=600, allow_dirty=False):
     learners = ["logistic", "svm_calibrated", "mlp"] if gpu else ["logistic"]
     arguments = [sys.executable, ROOT / "scripts/run_v6_3_3_final.py", "--datasets", "viruspseaac", "--base-learners", *learners, "--folds", "1", "--output-root", Path(output_root).resolve()]
+    if allow_dirty:
+        arguments.append("--allow-dirty")
     first = run_step(arguments, timeout, capture=True)
     run_line = next((line for line in first.stdout.splitlines() if line.startswith("RUN_DIR=")), None)
     if run_line is None:

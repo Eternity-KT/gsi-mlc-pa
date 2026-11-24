@@ -9,6 +9,7 @@ import json
 import os
 import platform
 import random
+import shutil
 import subprocess
 import sys
 import time
@@ -40,6 +41,9 @@ from src.models.binary_relevance import BinaryRelevanceClassifier
 from src.models.classifier_chain import ClassifierChainClassifier
 from src.models.gsi_v6_3_3 import GSIMLCPAv6_3_3Classifier
 from src.models.mlc_pa import MLCPartialAbstentionClassifier
+
+FROZEN_BASELINE_MODELS = ("BR", "CC", "MLC_PA")
+DEFAULT_FROZEN_BASELINES_DIR = ROOT / "results/v6_3_3_final_four_models/run_6c5fb2bebb16a7dc"
 
 
 def clean(value):
@@ -144,9 +148,9 @@ def _f1(tp, fp, fn):
 
 def label_records(truth, full, partial, y_train, label_names, model):
     records, thresholds, partitions = [], [], []
-    il = set(getattr(model, "independent_labels_", []))
-    dl = set(getattr(model, "dependent_labels_", []))
-    layers = {label: depth for depth, labels in enumerate(getattr(model, "independent_layers_", []), 1) for label in labels}
+    al = set(getattr(model, "anchor_labels_", []))
+    cl = set(getattr(model, "contextual_labels_", []))
+    layers = {label: depth for depth, labels in enumerate(getattr(model, "anchor_layers_", []), 1) for label in labels}
     adaptive = getattr(model, "adaptive_thresholds_", {})
     for label, label_name in enumerate(label_names):
         y, p = truth[:, label], partial[:, label]
@@ -154,7 +158,7 @@ def label_records(truth, full, partial, y_train, label_names, model):
         fp = int(np.sum((y == 0) & (p == 1)))
         fn = int(np.sum((y == 1) & (p == 0)))
         tn = int(np.sum((y == 0) & (p == 0)))
-        group = "IL" if label in il else ("DL" if label in dl else "NA")
+        group = "AL" if label in al else ("CL" if label in cl else "NA")
         records.append({
             "Label": label, "Label_Name": label_name, "Group": group,
             "Train_Positives": int(y_train[:, label].sum()),
@@ -181,7 +185,7 @@ def label_records(truth, full, partial, y_train, label_names, model):
             th = {"tau_0": c, "tau_1": 1.0 - c if c is not None else None, "prior": float(y_train[:, label].mean()), "regime": "symmetric_chow" if c is not None else "native_binary"}
             full_t = 0.5
         thresholds.append({"Label": label, "Full_Threshold": full_t, "SAMG": False, **th})
-        partitions.append({"Label": label, "Label_Name": label_name, "Group": group, "IL_Layer": layers.get(label), "Dependent_Parents": json.dumps(getattr(model, "dependency_graph_", {}).get(label, []))})
+        partitions.append({"Label": label, "Label_Name": label_name, "Group": group, "AL_Layer": layers.get(label)})
     return records, thresholds, partitions
 
 
@@ -225,7 +229,76 @@ def write_checksums(run_dir):
     (run_dir / "checksums.sha256").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def execute(config_path, output_root, datasets=None, learners=None, folds=None, allow_dirty=False):
+def _validate_frozen_baselines(ref_dir, config, selected_ds, split_records):
+    """Validate that a frozen reference run matches CV, preprocessing, and baseline settings."""
+    ref_dir = Path(ref_dir).resolve()
+    manifest_path = ref_dir / "run_manifest.json"
+    splits_path = ref_dir / "fold_indices.json"
+    if not manifest_path.is_file() or not splits_path.is_file():
+        raise FileNotFoundError(f"Invalid frozen baselines directory: {ref_dir}")
+    ref_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    ref_identity = ref_manifest["identity"]
+    ref_config = ref_identity["config"]
+    for key in ("cv", "preprocessing", "mlc_pa"):
+        if ref_config.get(key) != config.get(key):
+            raise ValueError(f"Frozen baseline config mismatch on '{key}'")
+    if ref_identity.get("base_learner_config") != load_experiment_config():
+        raise ValueError("Frozen baseline base_learner_config differs from current configs/experiment.json")
+    ref_splits = json.loads(splits_path.read_text(encoding="utf-8"))
+    for dataset in selected_ds:
+        if ref_splits.get(dataset) != split_records[dataset]:
+            raise ValueError(f"Frozen baseline fold_indices differ for dataset '{dataset}'")
+    return ref_dir, ref_manifest
+
+
+def _copy_frozen_baseline_cell(ref_dir, ref_run_id, stem, cell_path, prediction_path):
+    """Copy a verified baseline prediction byte-for-byte and normalize schema columns."""
+    ref_cell_path = ref_dir / "cells" / f"{stem}.json"
+    ref_pred_path = ref_dir / "predictions" / f"{stem}.npz"
+    if not ref_cell_path.is_file() or not ref_pred_path.is_file():
+        raise FileNotFoundError(f"Missing frozen baseline artifact: {stem} in {ref_dir}")
+    ref_cell = json.loads(ref_cell_path.read_text(encoding="utf-8"))
+    actual_sha = digest_file(ref_pred_path)
+    if actual_sha != ref_cell["prediction_sha256"]:
+        raise ValueError(f"Frozen baseline prediction checksum mismatch: {stem}")
+
+    temporary = prediction_path.with_suffix(".tmp")
+    shutil.copyfile(ref_pred_path, temporary)
+    temporary.replace(prediction_path)
+
+    metric_rename = {
+        "IL_Label_Count": "AL_Label_Count",
+        "IL_Coverage": "AL_Coverage",
+        "IL_Selective_Macro_F1": "AL_Selective_Macro_F1",
+        "DL_Label_Count": "CL_Label_Count",
+        "DL_Coverage": "CL_Coverage",
+        "DL_Selective_Macro_F1": "CL_Selective_Macro_F1",
+    }
+    normalized_metrics = {metric_rename.get(k, k): v for k, v in ref_cell["metrics"].items()}
+    normalized_partitions = [
+        {
+            "Label": row["Label"],
+            "Label_Name": row["Label_Name"],
+            "Group": row["Group"],
+            "AL_Layer": row.get("AL_Layer", row.get("IL_Layer")),
+        }
+        for row in ref_cell["partitions"]
+    ]
+    normalized_cell = {
+        "key": ref_cell["key"],
+        "metrics": normalized_metrics,
+        "per_label": ref_cell["per_label"],
+        "thresholds": ref_cell["thresholds"],
+        "partitions": normalized_partitions,
+        "prediction_sha256": actual_sha,
+        "warnings": ref_cell.get("warnings", []),
+        "frozen_from_run_id": ref_run_id,
+    }
+    write_json(cell_path, normalized_cell)
+    return normalized_cell
+
+
+def execute(config_path, output_root, datasets=None, learners=None, folds=None, allow_dirty=False, frozen_baselines_dir=None, models=None):
     config_path = Path(config_path).resolve()
     config = json.loads(config_path.read_text(encoding="utf-8"))
     if config["gsi_v6_3_3"]["separation_aware"] or config["variant"] != "standard_no_samg":
@@ -233,7 +306,8 @@ def execute(config_path, output_root, datasets=None, learners=None, folds=None, 
     selected_ds = [canonicalize_dataset_name(d) for d in (datasets or config["datasets"])]
     selected_learners = list(learners or config["base_learners"])
     selected_folds = list(folds or range(1, config["cv"]["outer_splits"] + 1))
-    for values, allowed in ((selected_ds, config["datasets"]), (selected_learners, config["base_learners"]), (selected_folds, list(range(1, 6)))):
+    selected_models = list(models or config["models"])
+    for values, allowed in ((selected_ds, config["datasets"]), (selected_learners, config["base_learners"]), (selected_folds, list(range(1, 6))), (selected_models, config["models"])):
         if len(set(values)) != len(values) or not set(values).issubset(allowed):
             raise ValueError(f"Invalid or duplicate selection: {values}")
     paths = ["src", "configs", "scripts/run_v6_3_3_final.py", "scripts/verify_v6_3_3_results.py", "scripts/validate_v6_3_3_datasets.py", "tests/test_v6_3_3_final_runner.py", "requirements-final.lock.txt"]
@@ -260,6 +334,16 @@ def execute(config_path, output_root, datasets=None, learners=None, folds=None, 
     if errors:
         raise ValueError(f"Dataset preflight failed: {errors}")
 
+    split_records = {}
+    for dataset, (X, Y, _, _) in dataset_cache.items():
+        cv = MultilabelStratifiedKFold(n_splits=config["cv"]["outer_splits"], shuffle=config["cv"]["shuffle"], random_state=config["cv"]["random_state"])
+        split_records[dataset] = [{"fold": fold, "train_indices": tr.tolist(), "test_indices": te.tolist()} for fold, (tr, te) in enumerate(cv.split(X, Y), 1)]
+
+    frozen_ref_dir, frozen_ref_run_id = None, None
+    if frozen_baselines_dir is not None:
+        frozen_ref_dir, ref_manifest = _validate_frozen_baselines(frozen_baselines_dir, config, selected_ds, split_records)
+        frozen_ref_run_id = ref_manifest["run_id"]
+
     identity = {
         "config": config, "config_sha256": digest_file(config_path),
         "source_files": source_fingerprints(), "environment": environment(),
@@ -267,12 +351,16 @@ def execute(config_path, output_root, datasets=None, learners=None, folds=None, 
         "base_learner_config": load_experiment_config(),
         "selection": {"datasets": selected_ds, "base_learners": selected_learners, "folds": selected_folds},
     }
+    if selected_models != config["models"]:
+        identity["selection"]["models"] = selected_models
+    if frozen_ref_run_id is not None:
+        identity["frozen_baselines_run_id"] = frozen_ref_run_id
     run_id = hashlib.sha256(json_bytes(identity)).hexdigest()[:16]
     run_dir = Path(output_root).resolve() / f"run_{run_id}"
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "cells").mkdir(exist_ok=True)
     (run_dir / "predictions").mkdir(exist_ok=True)
-    expected = len(selected_ds) * len(selected_learners) * len(selected_folds) * len(config["models"])
+    expected = len(selected_ds) * len(selected_learners) * len(selected_folds) * len(selected_models)
     manifest_path = run_dir / "run_manifest.json"
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -285,15 +373,14 @@ def execute(config_path, output_root, datasets=None, learners=None, folds=None, 
     write_json(run_dir / "config_snapshot.json", config)
     write_json(run_dir / "dataset_manifest_snapshot.json", data_manifest)
 
-    split_records = {}
-    for dataset, (X, Y, _, _) in dataset_cache.items():
-        cv = MultilabelStratifiedKFold(n_splits=config["cv"]["outer_splits"], shuffle=config["cv"]["shuffle"], random_state=config["cv"]["random_state"])
-        split_records[dataset] = [{"fold": fold, "train_indices": tr.tolist(), "test_indices": te.tolist()} for fold, (tr, te) in enumerate(cv.split(X, Y), 1)]
     fold_path = run_dir / "fold_indices.json"
     if fold_path.exists() and json.loads(fold_path.read_text(encoding="utf-8")) != split_records:
         raise ValueError("Saved fold indices differ from current splits")
     write_json(fold_path, split_records)
-    print(f"RUN_DIR={run_dir}\nExpected fits: {expected}", flush=True)
+    gsi_fits = len(selected_ds) * len(selected_learners) * len(selected_folds) * sum(
+        1 for m in selected_models if frozen_ref_dir is None or m not in FROZEN_BASELINE_MODELS
+    )
+    print(f"RUN_DIR={run_dir}\nExpected cells: {expected} (active fits: {gsi_fits}, frozen baselines: {expected - gsi_fits})", flush=True)
     completed = 0
     with threadpool_limits(limits=runtime["blas_threads"]):
         for dataset in selected_ds:
@@ -309,7 +396,7 @@ def execute(config_path, output_root, datasets=None, learners=None, folds=None, 
                 y_train, y_test = Y[train], Y[test]
                 seed = config["cv"]["random_state"] + fold - 1
                 for learner in selected_learners:
-                    for name in config["models"]:
+                    for name in selected_models:
                         stem = f"{dataset}__{learner}__{name}__fold{fold}"
                         cell_path = run_dir / "cells" / f"{stem}.json"
                         prediction_path = run_dir / "predictions" / f"{stem}.npz"
@@ -318,6 +405,13 @@ def execute(config_path, output_root, datasets=None, learners=None, folds=None, 
                             if not prediction_path.is_file() or digest_file(prediction_path) != cell["prediction_sha256"]:
                                 raise ValueError(f"Checkpoint prediction mismatch: {stem}")
                             completed += 1
+                            continue
+                        if frozen_ref_dir is not None and name in FROZEN_BASELINE_MODELS:
+                            reused = _copy_frozen_baseline_cell(frozen_ref_dir, frozen_ref_run_id, stem, cell_path, prediction_path)
+                            completed += 1
+                            manifest.update(completed_cells=completed, updated_utc=utc_now(), last_completed=reused["key"])
+                            write_json(manifest_path, manifest)
+                            print(f"[{completed}/{expected}] {dataset} {learner} fold={fold} {name}: F1={reused['metrics']['Selective_Macro_F1']:.4f} cov={reused['metrics']['Coverage']:.4f} [FROZEN]", flush=True)
                             continue
                         random.seed(seed)
                         np.random.seed(seed)
@@ -339,7 +433,7 @@ def execute(config_path, output_root, datasets=None, learners=None, folds=None, 
                         key = {"Dataset": dataset, "Base_Learner": learner, "Model": name, "Fold": fold, "Seed": seed}
                         metrics = metric_values(y_test, full, partial, config["mlc_pa"]["cost"])
                         records, thresholds, partitions = label_records(y_test, full, partial, y_train, names, model)
-                        for group, indices in (("IL", getattr(model, "independent_labels_", [])), ("DL", getattr(model, "dependent_labels_", []))):
+                        for group, indices in (("AL", getattr(model, "anchor_labels_", [])), ("CL", getattr(model, "contextual_labels_", []))):
                             metrics[f"{group}_Label_Count"] = len(indices)
                             metrics[f"{group}_Coverage"] = float(np.mean(partial[:, indices] != -1)) if indices else None
                             metrics[f"{group}_Selective_Macro_F1"] = compute_selective_macro_f1(y_test[:, indices], partial[:, indices]) if indices else None
@@ -372,9 +466,13 @@ def main():
     parser.add_argument("--datasets", nargs="+")
     parser.add_argument("--base-learners", nargs="+")
     parser.add_argument("--folds", nargs="+", type=int)
+    parser.add_argument("--models", nargs="+", help="Subset of models to run; defaults to all configured models.")
+    parser.add_argument("--frozen-baselines-dir", type=Path, default=DEFAULT_FROZEN_BASELINES_DIR, help="Reference run directory providing frozen BR, CC, and MLC_PA predictions.")
+    parser.add_argument("--retrain-baselines", action="store_true", help="Refit BR, CC, and MLC_PA from scratch instead of reusing frozen baselines.")
     parser.add_argument("--allow-dirty", action="store_true", help="Smoke tests only; records dirty source in provenance.")
     args = parser.parse_args()
-    execute(args.config, args.output_root, args.datasets, args.base_learners, args.folds, args.allow_dirty)
+    frozen_dir = None if args.retrain_baselines else args.frozen_baselines_dir
+    execute(args.config, args.output_root, args.datasets, args.base_learners, args.folds, args.allow_dirty, frozen_baselines_dir=frozen_dir, models=args.models)
 
 
 if __name__ == "__main__":

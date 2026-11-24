@@ -4,15 +4,17 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from scripts.run_v6_3_3_final import make_model, metric_values, validate_predictions
+from scripts.run_v6_3_3_final import label_records, make_model, metric_values, validate_predictions
 from src.models.gsi_v6_3_3 import GSIMLCPAv6_3_3Classifier
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = json.loads((ROOT / "configs/v6_3_3_final.json").read_text(encoding="utf-8"))
 
 
-def test_final_defaults_disable_samg():
+def test_final_defaults_exclude_os_nmf_and_samg():
     assert GSIMLCPAv6_3_3Classifier().separation_aware is False
+    assert "mf_alpha" not in CONFIG["gsi_v6_3_3"]
+    assert "residual_corr_threshold" not in CONFIG["gsi_common"]
     model = make_model("GSI_v6_3_3", "logistic", 42, CONFIG)
     assert model.separation_aware is False
     assert model.cost == 0.30
@@ -57,7 +59,7 @@ def test_invalid_prediction_artifact_is_rejected():
 
 
 @pytest.mark.parametrize("name", CONFIG["models"])
-def test_all_final_models_fit_synthetic_fold(name):
+def test_all_final_models_fit_synthetic_fold_and_emit_al_cl_records(name):
     rng = np.random.RandomState(8)
     X = rng.normal(size=(80, 5)).astype(np.float32)
     Y = np.column_stack([X[:, 0] > 0, X[:, 1] > 0, X[:, 2] > 1]).astype(np.int32)
@@ -68,3 +70,45 @@ def test_all_final_models_fit_synthetic_fold(name):
     partial = model.predict(X[60:])
     validate_predictions(Y[60:], probabilities, full, partial)
     assert 0 <= metric_values(Y[60:], full, partial, 0.3)["Coverage"] <= 1
+
+    records, _, partitions = label_records(Y[60:], full, partial, Y[:60], ["L0", "L1", "L2"], model)
+    if name == "GSI_v6_3_3":
+        assert {r["Group"] for r in records}.issubset({"AL", "CL"})
+        assert all("AL_Layer" in p and "Dependent_Parents" not in p for p in partitions)
+
+
+def test_frozen_baselines_reuse_br_cc_mlc_pa_and_only_fit_gsi(tmp_path, monkeypatch):
+    from scripts import run_v6_3_3_final as runner
+    from scripts.verify_v6_3_3_results import verify
+
+    if not runner.DEFAULT_FROZEN_BASELINES_DIR.is_dir():
+        pytest.skip("Frozen reference run is not installed")
+
+    fitted_models = []
+    orig_make_model = runner.make_model
+
+    def spy_make_model(name, learner, seed, cfg):
+        fitted_models.append(name)
+        return orig_make_model(name, learner, seed, cfg)
+
+    monkeypatch.setattr(runner, "make_model", spy_make_model)
+    run_dir = runner.execute(
+        ROOT / "configs/v6_3_3_final.json",
+        tmp_path,
+        datasets=["viruspseaac"],
+        learners=["logistic"],
+        folds=[1],
+        allow_dirty=True,
+        frozen_baselines_dir=runner.DEFAULT_FROZEN_BASELINES_DIR,
+    )
+
+    # Only GSI_v6_3_3 is fitted; BR, CC, MLC_PA are copied byte-for-byte
+    assert fitted_models == ["GSI_v6_3_3"]
+    for baseline in ("BR", "CC", "MLC_PA"):
+        stem = f"viruspseaac__logistic__{baseline}__fold1.npz"
+        assert (run_dir / "predictions" / stem).read_bytes() == (
+            runner.DEFAULT_FROZEN_BASELINES_DIR / "predictions" / stem
+        ).read_bytes()
+    verification = verify(run_dir, check_source=True)
+    assert verification["status"] == "verified"
+    assert verification["verified_cells"] == 4

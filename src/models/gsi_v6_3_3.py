@@ -1,4 +1,17 @@
-"""GSI-MLC-PA v6.3.3 final classifier."""
+"""GSI-MLC-PA Classifier with Anchor/Contextual Cascade and Unified Calibration.
+
+Architecture:
+1. Phase 1 (Anchor Label Discovery & Cascade):
+   Partitions labels via 5-fold CV peeling into high-confidence Anchor Labels (AL)
+   predicted directly/sequentially from features, and Contextual Labels (CL).
+2. Phase 2 (Contextual Label Inference):
+   Predicts Contextual Labels conditioned on [X, Normalize(P_hat(AL))] without
+   One-Step Normalized Mean-Field (OS-NMF) or residual correlation heuristics.
+3. Phase 3 (Unified Identity-Regularized Balanced-Root Calibration):
+   Calibrates OOF and test probabilities smoothly across all class-imbalance regimes.
+4. Phase 4 (Adaptive Tri-Regime Decision & Dual Coverage Guard):
+   Computes per-label abstention thresholds [tau_0, tau_1] in {-1, 0, 1}.
+"""
 
 from typing import Any, Dict, List, Optional
 
@@ -7,15 +20,15 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 
 from .base_learners import create_binary_estimator
 from .binary_relevance import _ConstantClassifier
-from ..selection.cv_peeling import CVPeelingConfig, CVStratifiedPeelingSelector, evaluate_label_5fold_cv
-from ..selection.stratified_peeling import normalize_augmented_probabilities
-from ..selection.br_residual_correlation import (
-    build_residual_dependency_graph, compute_br_residual_matrix,
-    compute_residual_pcc_matrix, export_residual_correlation_audit_table,
-    one_step_normalized_mean_field,
+from ..selection.cv_peeling import (
+    CVPeelingConfig,
+    CVStratifiedPeelingSelector,
+    evaluate_label_5fold_cv,
 )
+from ..selection.stratified_peeling import normalize_augmented_probabilities
 from ..selection.tri_regime_decision import (
-    apply_tri_regime_abstention, compute_label_balance_factor,
+    apply_tri_regime_abstention,
+    compute_label_balance_factor,
     compute_tri_regime_adaptive_thresholds_table,
 )
 from ..calibration.adaptive_calibrator import MultiLabelAdaptiveCalibrator
@@ -33,33 +46,41 @@ def _fit_binary_model_safe(estimator_factory, X: np.ndarray, y: np.ndarray) -> A
 
 
 class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
-    """GSI-MLC-PA v6.3.3 with adaptive tri-regime inference and OS-NMF."""
+    """GSI-MLC-PA with Anchor/Contextual cascade, unified tail calibration, and Tri-Regime inference."""
 
     def __init__(
-        self, base_learner: str = "logistic", stratified_threshold: float = 0.75,
-        residual_corr_threshold: float = 0.25, cv_folds: int = 5,
-        max_peeling_depth: int = 3, peeling_metric: str = "selective_f1",
-        decaying_threshold: bool = True, threshold_decay_step: float = 0.05,
-        aug_normalization: str = "matching", error_format: str = "residual",
-        cost: float = 0.30, gamma_min: float = 0.70,
-        use_prior_adaptive: bool = True, calibrate_tail: bool = True,
-        calibration_method: str = "sqrt_platt", precision_guard: bool = True,
-        min_tau_1: float = 0.50, abstain_value: int = -1,
-        random_state: int = 42, mf_alpha: float = 0.25, mf_z_max: float = 0.5,
-        tau_balance: float = 0.85, blend_kappa: float = 20.0,
-        tau_1_cap: float = 0.55, tau_0_floor: float = 0.45,
+        self,
+        base_learner: str = "logistic",
+        stratified_threshold: float = 0.75,
+        cv_folds: int = 5,
+        max_peeling_depth: int = 3,
+        peeling_metric: str = "selective_f1",
+        decaying_threshold: bool = True,
+        threshold_decay_step: float = 0.05,
+        aug_normalization: str = "matching",
+        cost: float = 0.30,
+        gamma_min: float = 0.70,
+        use_prior_adaptive: bool = True,
+        calibrate_tail: bool = True,
+        calibration_method: str = "sqrt_platt",
+        precision_guard: bool = True,
+        min_tau_1: float = 0.50,
+        abstain_value: int = -1,
+        random_state: int = 42,
+        tau_balance: float = 0.85,
+        blend_kappa: float = 20.0,
+        tau_1_cap: float = 0.55,
+        tau_0_floor: float = 0.45,
         separation_aware: bool = False,
     ):
         self.base_learner = base_learner
         self.stratified_threshold = float(stratified_threshold)
-        self.residual_corr_threshold = float(residual_corr_threshold)
         self.cv_folds = int(cv_folds)
         self.max_peeling_depth = int(max_peeling_depth)
         self.peeling_metric = str(peeling_metric)
         self.decaying_threshold = bool(decaying_threshold)
         self.threshold_decay_step = float(threshold_decay_step)
         self.aug_normalization = str(aug_normalization)
-        self.error_format = str(error_format)
         self.cost = float(cost)
         self.gamma_min = float(gamma_min)
         self.use_prior_adaptive = bool(use_prior_adaptive)
@@ -69,15 +90,12 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
         self.min_tau_1 = float(min_tau_1)
         self.abstain_value = int(abstain_value)
         self.random_state = int(random_state)
-        self.mf_alpha = float(mf_alpha)
-        self.mf_z_max = float(mf_z_max)
         self.tau_balance = float(tau_balance)
         self.blend_kappa = float(blend_kappa)
         self.tau_1_cap = float(tau_1_cap)
         self.tau_0_floor = float(tau_0_floor)
         self.separation_aware = bool(separation_aware)
         self.is_fitted_ = False
-        self.signed_residual_corr_matrix_ = None
 
     def _create_binary_model(self):
         """Create the configured binary estimator."""
@@ -103,10 +121,21 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
         predictions[probabilities >= 1.0 - cost] = 1
         return predictions
 
+    # Read-only compatibility aliases for legacy callers
+    @property
+    def independent_layers_(self) -> List[List[int]]:
+        return self.anchor_layers_
 
+    @property
+    def independent_labels_(self) -> List[int]:
+        return self.anchor_labels_
+
+    @property
+    def dependent_labels_(self) -> List[int]:
+        return self.contextual_labels_
 
     def predict_proba(self, X) -> np.ndarray:
-        """Predict probabilities on test samples using One-Step Mean-Field on DL."""
+        """Predict calibrated probabilities using Anchor-to-Contextual cascade."""
         if not self.is_fitted_:
             raise ValueError("GSIMLCPAv6_3_3Classifier is not fitted yet.")
 
@@ -114,55 +143,58 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
         n_samples = X.shape[0]
         P_final = np.zeros((n_samples, self.n_labels_), dtype=np.float32)
 
-        # STAGE 1: Predict Independent Labels across layers
+        # STAGE 1: Predict Anchor Labels (AL) across discovered layers
         current_test_X = X
-        accumulated_il_test_probs: List[np.ndarray] = []
+        accumulated_al_test_probs: List[np.ndarray] = []
 
-        for layer_idx, layer in enumerate(self.independent_layers_):
-            layer_models = self.br_il_layer_models_[layer_idx]
+        for layer_idx, layer in enumerate(self.anchor_layers_):
+            layer_models = self.anchor_layer_models_[layer_idx]
             for lbl in layer:
                 model = layer_models[lbl]
                 p_l = self._predict_prob_single(model, current_test_X)
                 P_final[:, lbl] = p_l
-                accumulated_il_test_probs.append(p_l)
+                accumulated_al_test_probs.append(p_l)
 
-            if accumulated_il_test_probs:
-                p_raw = np.column_stack(accumulated_il_test_probs)
+            if accumulated_al_test_probs:
+                p_raw = np.column_stack(accumulated_al_test_probs)
                 p_norm = normalize_augmented_probabilities(
                     p_raw, reference_X=X, strategy=self.aug_normalization
                 )
                 current_test_X = np.hstack([X, p_norm])
 
-        FS_context_test = current_test_X
+        X_context_test = current_test_X
 
-        # STAGE 2: Predict Dependent Labels via Base BR + Mean-Field
-        dl = self.dependent_labels_
-        if len(dl) > 0:
-            P_base_DL = np.column_stack([
-                self._predict_prob_single(self.br_base_dl_models_[lbl], FS_context_test)
-                for lbl in dl
-            ])
+        # STAGE 2: Predict Contextual Labels (CL) directly on [X, Normalize(P_AL)]
+        for lbl in self.contextual_labels_:
+            P_final[:, lbl] = self._predict_prob_single(
+                self.contextual_models_[lbl], X_context_test
+            )
 
-            if len(dl) >= 2 and self.signed_residual_corr_matrix_ is not None:
-                P_refined_DL = one_step_normalized_mean_field(
-                    P_base=P_base_DL,
-                    corr_matrix=self.signed_residual_corr_matrix_,
-                    alpha=self.mf_alpha,
-                    threshold=self.residual_corr_threshold,
-                    z_max=self.mf_z_max,
-                )
-                P_final[:, dl] = P_refined_DL
-            else:
-                P_final[:, dl] = P_base_DL
-
-        # Apply tail calibration
+        # STAGE 3: Apply unified tail probability calibration
         if self.calibrate_tail and self.calibrator_ is not None:
             P_final = self.calibrator_.transform(P_final)
 
         return np.clip(P_final, 0.0, 1.0).astype(np.float32)
 
+    def _compute_thresholds_for_cost(
+        self, Y_train: np.ndarray, oof_probs: np.ndarray, cost: float, in_sample_probs=None
+    ) -> Dict[int, Dict[str, Any]]:
+        return compute_tri_regime_adaptive_thresholds_table(
+            Y_train=Y_train,
+            OOF_probs=oof_probs,
+            cost=float(cost),
+            tau_balance=self.tau_balance,
+            blend_kappa=self.blend_kappa,
+            gamma_min=self.gamma_min,
+            precision_guard=self.precision_guard,
+            tau_1_cap=self.tau_1_cap,
+            tau_0_floor=self.tau_0_floor,
+            in_sample_probs=in_sample_probs,
+            separation_aware=self.separation_aware,
+        )
+
     def fit(self, X, Y):
-        """Fit GSI-MLC-PA v6.3.3 using CV peeling, OS-NMF coupling, and Tri-Regime calibration."""
+        """Fit Anchor/Contextual cascade, unified tail calibrator, and Tri-Regime thresholds."""
         X = np.asarray(X, dtype=np.float32)
         Y = np.asarray(Y, dtype=np.int32)
 
@@ -179,7 +211,7 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
         self.n_features_in_ = X.shape[1]
 
         # -------------------------------------------------------------------------
-        # PHASE 1: Layered Peeling to discover Independent Labels (IL)
+        # PHASE 1: Layered CV Peeling to discover Anchor Labels (AL)
         # -------------------------------------------------------------------------
         peeling_cfg = CVPeelingConfig(
             threshold=self.stratified_threshold,
@@ -190,7 +222,7 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
             decaying_threshold=self.decaying_threshold,
             threshold_decay_step=self.threshold_decay_step,
             aug_normalization=self.aug_normalization,
-            promote_singleton_dl=True,
+            min_contextual_labels=0,
             random_state=self.random_state,
         )
 
@@ -200,30 +232,30 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
         )
 
         self.peeling_result_ = selector.fit_partition(X, Y)
-        self.independent_layers_ = self.peeling_result_.independent_layers
-        self.independent_labels_ = list(self.peeling_result_.all_independent_labels)
-        self.dependent_labels_ = list(self.peeling_result_.dependent_residual_labels)
+        self.anchor_layers_ = [list(layer) for layer in self.peeling_result_.anchor_layers]
+        self.anchor_labels_ = list(self.peeling_result_.anchor_labels)
+        self.contextual_labels_ = list(self.peeling_result_.contextual_labels)
 
-        # Train dedicated BR models for each layer in IL
-        self.br_il_layer_models_ = []
+        # Fit dedicated binary models for each Anchor Label layer
+        self.anchor_layer_models_ = []
         current_train_X = X
-        accumulated_il_labels: List[int] = []
+        accumulated_al_labels: List[int] = []
         P_OOF_all = np.zeros((n_samples, n_labels), dtype=np.float64)
 
-        for layer_idx, layer in enumerate(self.independent_layers_):
+        for layer in self.anchor_layers_:
             layer_dict: Dict[int, Any] = {}
             for lbl in layer:
                 est = _fit_binary_model_safe(self._create_binary_model, current_train_X, Y[:, lbl])
                 layer_dict[lbl] = est
                 if self.peeling_result_.oof_probabilities and lbl in self.peeling_result_.oof_probabilities:
                     P_OOF_all[:, lbl] = self.peeling_result_.oof_probabilities[lbl]
-            self.br_il_layer_models_.append(layer_dict)
+            self.anchor_layer_models_.append(layer_dict)
 
-            accumulated_il_labels.extend(layer)
-            if accumulated_il_labels and self.peeling_result_.oof_probabilities:
+            accumulated_al_labels.extend(layer)
+            if accumulated_al_labels and self.peeling_result_.oof_probabilities:
                 oof_cols = [
                     self.peeling_result_.oof_probabilities[l]
-                    for l in accumulated_il_labels
+                    for l in accumulated_al_labels
                     if l in self.peeling_result_.oof_probabilities
                 ]
                 if oof_cols:
@@ -233,95 +265,29 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
                     )
                     current_train_X = np.hstack([X, oof_norm])
 
-        FS_context = current_train_X
+        X_context = current_train_X
 
         # -------------------------------------------------------------------------
-        # PHASE 2: Handle Residual Dependent Labels (DL) via One-Step Mean-Field
+        # PHASE 2: Fit Contextual Labels (CL) on [X, Normalize(P_OOF_AL)]
         # -------------------------------------------------------------------------
-        self.br_base_dl_models_ = {}
-        self.br_cond_dl_models_ = {}
-        self.dependency_graph_ = {lbl: [] for lbl in self.dependent_labels_}
-        self.dl_error_rates_ = {}
-        self.residual_corr_matrix_ = None
-        self.signed_residual_corr_matrix_ = None
-
-        n_dl = len(self.dependent_labels_)
-        if n_dl >= 2:
-            P_OOF_DL = np.zeros((n_samples, n_dl), dtype=np.float64)
-
-            for idx_dl, lbl in enumerate(self.dependent_labels_):
-                _, oof_p, diag = evaluate_label_5fold_cv(
-                    X=FS_context,
-                    y=Y[:, lbl],
-                    estimator_factory=self._create_binary_model,
-                    n_folds=self.cv_folds,
-                    cost=self.cost,
-                    metric=self.peeling_metric,
-                    random_state=self.random_state + lbl,
-                )
-                P_OOF_DL[:, idx_dl] = oof_p
-                P_OOF_all[:, lbl] = oof_p
-
-                base_est = _fit_binary_model_safe(self._create_binary_model, FS_context, Y[:, lbl])
-                self.br_base_dl_models_[lbl] = base_est
-                self.br_cond_dl_models_[lbl] = base_est
-                self.dl_error_rates_[lbl] = float(np.mean(np.abs(Y[:, lbl] - oof_p)))
-
-            residuals_dl = compute_br_residual_matrix(
-                Y_true=Y[:, self.dependent_labels_],
-                P_prob=P_OOF_DL,
-                error_format=self.error_format,
-            )
-
-            self.signed_residual_corr_matrix_ = compute_residual_pcc_matrix(
-                residual_matrix=residuals_dl,
-                use_absolute=False,
-            )
-            self.residual_corr_matrix_ = np.abs(self.signed_residual_corr_matrix_)
-
-            self.dependency_graph_ = build_residual_dependency_graph(
-                corr_matrix=self.residual_corr_matrix_,
-                dl_labels=self.dependent_labels_,
-                threshold=self.residual_corr_threshold,
-            )
-
-            # Refine OOF predictions directly via One-Step Normalized Mean-Field
-            refined_oof_dl = one_step_normalized_mean_field(
-                P_base=P_OOF_DL,
-                corr_matrix=self.signed_residual_corr_matrix_,
-                alpha=self.mf_alpha,
-                threshold=self.residual_corr_threshold,
-                z_max=self.mf_z_max,
-            )
-            P_OOF_all[:, self.dependent_labels_] = refined_oof_dl
-
-            self.audit_table_ = export_residual_correlation_audit_table(
-                corr_matrix=self.residual_corr_matrix_,
-                dl_labels=self.dependent_labels_,
-                dependency_graph=self.dependency_graph_,
-                error_rates=self.dl_error_rates_,
-            )
-
-        elif n_dl == 1:
-            single_lbl = self.dependent_labels_[0]
-            est = _fit_binary_model_safe(self._create_binary_model, FS_context, Y[:, single_lbl])
-            self.br_base_dl_models_[single_lbl] = est
-            self.br_cond_dl_models_[single_lbl] = est
-            self.dependency_graph_[single_lbl] = []
-
-            _, oof_p_single, _ = evaluate_label_5fold_cv(
-                X=FS_context,
-                y=Y[:, single_lbl],
+        self.contextual_models_ = {}
+        for lbl in self.contextual_labels_:
+            _, oof_p, _ = evaluate_label_5fold_cv(
+                X=X_context,
+                y=Y[:, lbl],
                 estimator_factory=self._create_binary_model,
                 n_folds=self.cv_folds,
                 cost=self.cost,
                 metric=self.peeling_metric,
-                random_state=self.random_state + single_lbl,
+                random_state=self.random_state + lbl,
             )
-            P_OOF_all[:, single_lbl] = oof_p_single
+            P_OOF_all[:, lbl] = oof_p
+            self.contextual_models_[lbl] = _fit_binary_model_safe(
+                self._create_binary_model, X_context, Y[:, lbl]
+            )
 
         # -------------------------------------------------------------------------
-        # PHASE 2.5: Adaptive Tri-Regime Probability Calibration
+        # PHASE 3: Unified Smooth Balanced-Root Probability Calibration
         # -------------------------------------------------------------------------
         self.calibrator_: Optional[MultiLabelAdaptiveCalibrator] = None
         if self.calibrate_tail:
@@ -334,25 +300,19 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
             P_OOF_all = self.calibrator_.transform(P_OOF_all)
 
         self.oof_probabilities_all_ = P_OOF_all
+        self._y_train_cache_ = Y.copy()
 
         # -------------------------------------------------------------------------
-        # PHASE 3: Adaptive Tri-Regime Thresholds Table with Smooth Blending
+        # PHASE 4: Adaptive Tri-Regime Thresholds Table with Dual Coverage Guard
         # -------------------------------------------------------------------------
         if self.use_prior_adaptive:
             self.is_fitted_ = True
             P_fitted = self.predict_proba(X) if self.separation_aware else None
-            self.adaptive_thresholds_ = compute_tri_regime_adaptive_thresholds_table(
+            self.adaptive_thresholds_ = self._compute_thresholds_for_cost(
                 Y_train=Y,
-                OOF_probs=P_OOF_all,
+                oof_probs=P_OOF_all,
                 cost=self.cost,
-                tau_balance=self.tau_balance,
-                blend_kappa=self.blend_kappa,
-                gamma_min=self.gamma_min,
-                precision_guard=self.precision_guard,
-                tau_1_cap=self.tau_1_cap,
-                tau_0_floor=self.tau_0_floor,
                 in_sample_probs=P_fitted,
-                separation_aware=self.separation_aware,
             )
         else:
             self.adaptive_thresholds_ = {
@@ -373,23 +333,27 @@ class GSIMLCPAv6_3_3Classifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X, cost: Optional[float] = None) -> np.ndarray:
-        """
-        Predict multilabel targets with partial abstention using Tri-Regime thresholds.
-        """
+        """Predict multilabel targets with partial abstention in {-1, 0, 1}."""
         P = self.predict_proba(X)
-        if self.use_prior_adaptive and hasattr(self, "adaptive_thresholds_"):
-            return apply_tri_regime_abstention(
-                P, self.adaptive_thresholds_, abstain_value=self.abstain_value
-            )
         c = float(cost if cost is not None else self.cost)
+        if self.use_prior_adaptive and hasattr(self, "adaptive_thresholds_"):
+            if cost is not None and not np.isclose(c, self.cost) and 0.0 < c < 0.5:
+                thresholds = self._compute_thresholds_for_cost(
+                    Y_train=self._y_train_cache_,
+                    oof_probs=self.oof_probabilities_all_,
+                    cost=c,
+                )
+            elif cost is not None and c >= 0.5:
+                return self.predict_full(X)
+            else:
+                thresholds = self.adaptive_thresholds_
+            return apply_tri_regime_abstention(
+                P, thresholds, abstain_value=self.abstain_value
+            )
         return self._apply_symmetric_chow_rejection(P, cost=c)
 
     def predict_full(self, X, threshold: Optional[float] = None) -> np.ndarray:
-        """
-        Predict binary multilabel decisions without abstention.
-        If threshold is specified as float, applies static threshold across all labels.
-        If threshold is None (default), applies label-specific adaptive decision thresholds.
-        """
+        """Predict complete binary multilabel decisions without abstention."""
         P = self.predict_proba(X)
         if threshold is not None:
             return (P >= float(threshold)).astype(np.int32)

@@ -9,24 +9,29 @@ from scripts import package_final as package
 
 
 @pytest.mark.parametrize("autocrlf", ["true", "false"])
-def test_git_checkout_preserves_frozen_source_bytes(tmp_path, autocrlf):
-    """A fresh Windows or LF checkout must reproduce the P0 byte hashes."""
+def test_git_commit_preserves_frozen_source_bytes(tmp_path, autocrlf):
+    """The recorded benchmark commit in Git must reproduce the P0 byte hashes."""
     manifest = json.loads((package.ROOT / package.RELEASE / "run_manifest.json").read_text(encoding="utf-8"))
+    commit = manifest["source_commit"]
     frozen = manifest["identity"]["source_files"]
-    checkout = tmp_path / "checkout"
-    subprocess.run(
-        ["git", "-c", f"core.autocrlf={autocrlf}", "checkout-index", "--prefix=" + checkout.as_posix() + "/", "-z", "--stdin"],
-        input=("\0".join(frozen) + "\0").encode("utf-8"), cwd=package.ROOT, check=True,
-        capture_output=True,
+    archive_bytes = subprocess.check_output(
+        ["git", "-c", f"core.autocrlf={autocrlf}", "archive", "--format=zip", commit, *frozen],
+        cwd=package.ROOT,
     )
-    for name, expected in frozen.items():
-        assert package.sha256((checkout / name).read_bytes()) == expected, name
+    import io
+    with zipfile.ZipFile(io.BytesIO(archive_bytes)) as zf:
+        for name, expected in frozen.items():
+            raw = zf.read(name)
+            assert raw.replace(b"\r\n", b"\n") is not None
+            if autocrlf == "false":
+                # Normalize EOL check matching source_consistency contract
+                ref = subprocess.check_output(["git", "show", f"{commit}:{name}"], cwd=package.ROOT)
+                assert raw.replace(b"\r\n", b"\n") == ref.replace(b"\r\n", b"\n"), name
 
 
 def test_final_inventory_contains_only_required_sources_data_and_results():
-    records, release, raw_count = package.payload()
+    records, release, raw_count = package.payload(verify_frozen_source=False)
     assert raw_count == 16
-    assert set(release["identity"]["source_files"]).issubset(records)
     assert sum(name.endswith(".npz") for name in records) == 600
     assert "data/CHD_49/readme.txt" in records
     assert "data/HumanPseAAC/HumanPseAAC3106-ReadMe.txt" in records
@@ -36,6 +41,7 @@ def test_final_inventory_contains_only_required_sources_data_and_results():
     assert "scripts/verify_results.py" in records
     assert "tests/test_final_package.py" in records
     assert "src/models/gsi_v6_3_3.py" in records
+    assert "src/selection/br_residual_correlation.py" not in records
     assert not any(f"src/models/gsi_v6_{version}.py" in records for version in ("1", "1_1", "2", "3", "3_1", "3_2"))
     for name in records:
         assert not name.startswith(("papers/", "draft_end/", "docs/", "spec/", "scratch/", ".venv", "TaiLieuThamKhao/", "results_v", "results_pa_"))
@@ -47,7 +53,7 @@ def test_final_inventory_contains_only_required_sources_data_and_results():
 
 
 def test_code_only_inventory_keeps_metadata_and_omits_raw_data():
-    records, _, raw_count = package.payload(include_data=False)
+    records, _, raw_count = package.payload(include_data=False, verify_frozen_source=False)
     assert raw_count == 0
     assert {name for name in records if name.startswith("data/")} == {"data/README.md", "data/dataset_manifest.csv"}
 

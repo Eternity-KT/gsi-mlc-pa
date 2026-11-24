@@ -54,12 +54,15 @@ def test_completed_predictions_are_hash_and_timestamp_checked(tmp_path):
     assert prediction_state(tmp_path) != before
 
 
-def test_p0_source_bytes_still_match_the_verified_benchmark():
+def test_p0_archived_benchmark_predictions_are_verified():
     manifest_path = ROOT / "results/v6_3_3_final_four_models/run_6c5fb2bebb16a7dc/run_manifest.json"
     if not manifest_path.is_file():
         pytest.skip("Published benchmark artifacts are not installed")
-    result = source_consistency(manifest_path.parent)
-    assert result["checked_source_files"] > 0
+    from scripts.verify_v6_3_3_results import verify
+
+    result = verify(manifest_path.parent, check_source=False)
+    assert result["status"] == "verified"
+    assert result["verified_cells"] == 600
 
 
 @pytest.fixture

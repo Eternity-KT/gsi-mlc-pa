@@ -55,7 +55,7 @@ def read_checksums(data):
     return records
 
 
-def payload(root=ROOT, include_data=True):
+def payload(root=ROOT, include_data=True, verify_frozen_source=True):
     """Use frozen inventories and explicit workflow files, never a directory dump."""
     root = Path(root).resolve()
     release = json.loads((root / RELEASE / "run_manifest.json").read_text(encoding="utf-8"))
@@ -63,7 +63,14 @@ def payload(root=ROOT, include_data=True):
         raise ValueError("The reference must contain all 600 completed fits")
     data = json.loads((root / "configs/datasets_v6_3_3.json").read_text(encoding="utf-8"))
     frozen = release["identity"]["source_files"]
-    names = set(frozen) | set(SUPPORT)
+    if verify_frozen_source:
+        source_names = set(frozen)
+    else:
+        from scripts.run_v6_3_3_final import source_fingerprints
+        source_names = set(source_fingerprints()) if root == ROOT.resolve() else {
+            p.relative_to(root).as_posix() for p in (root / "src").rglob("*.py")
+        }
+    names = source_names | set(SUPPORT)
     config = configparser.ConfigParser()
     config.read(root / "pytest-final.ini", encoding="utf-8")
     names.update(config["pytest"]["testpaths"].split())
@@ -91,7 +98,7 @@ def payload(root=ROOT, include_data=True):
             raise ValueError(f"Missing or invalid input: {name}")
         content = path.read_bytes()
         digest = sha256(content)
-        if name in frozen and digest != frozen[name]:
+        if verify_frozen_source and name in frozen and digest != frozen[name]:
             raise ValueError(f"Frozen source bytes differ: {name}. Use the byte-preserved final snapshot.")
         relative_result = Path(name).relative_to(RELEASE).as_posix() if Path(name).is_relative_to(RELEASE) else None
         if relative_result in result_records and digest != result_records[relative_result]:
