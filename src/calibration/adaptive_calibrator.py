@@ -22,8 +22,8 @@ class MultiLabelAdaptiveCalibrator:
         tau_balance: float = 0.85,
         method: str = "sqrt_platt",
         clip_eps: float = 1e-5,
-        reg_slope: float = 0.5,
-        reg_intercept: float = 0.05,
+        reg_slope: float = 0.2,
+        reg_intercept: float = 0.02,
         min_minority_samples: int = 3,
         random_state: int = 42,
     ):

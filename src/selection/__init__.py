@@ -35,6 +35,7 @@ from .tri_regime_decision import (
     apply_dual_coverage_guard,
     apply_tri_regime_abstention,
     compute_label_balance_factor,
+    compute_prior_bayes_raw_thresholds,
     compute_tri_regime_adaptive_thresholds_table,
     compute_tri_regime_raw_thresholds,
 )
@@ -65,6 +66,7 @@ __all__ = [
     "CVStratifiedPeelingSelector",
     "evaluate_label_5fold_cv",
     "compute_label_balance_factor",
+    "compute_prior_bayes_raw_thresholds",
     "compute_tri_regime_raw_thresholds",
     "apply_dual_coverage_guard",
     "compute_tri_regime_adaptive_thresholds_table",

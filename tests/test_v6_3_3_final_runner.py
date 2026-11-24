@@ -11,15 +11,34 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = json.loads((ROOT / "configs/v6_3_3_final.json").read_text(encoding="utf-8"))
 
 
-def test_final_defaults_exclude_os_nmf_and_samg():
-    assert GSIMLCPAv6_3_3Classifier().separation_aware is False
-    assert "mf_alpha" not in CONFIG["gsi_v6_3_3"]
-    assert "residual_corr_threshold" not in CONFIG["gsi_common"]
+def test_final_defaults_minimal_three_hyperparameters():
+    obsolete = (
+        "mf_alpha",
+        "residual_corr_threshold",
+        "separation_aware",
+        "min_tau_1",
+        "tau_balance",
+        "blend_kappa",
+        "tau_1_cap",
+        "tau_0_floor",
+        "max_peeling_depth",
+        "decaying_threshold",
+        "threshold_decay_step",
+        "aug_normalization",
+        "peeling_metric",
+        "calibration_method",
+        "calibrate_tail",
+        "use_prior_adaptive",
+        "precision_guard",
+    )
+    for key in obsolete:
+        assert key not in CONFIG["gsi_v6_3_3"]
+        assert key not in CONFIG["gsi_common"]
     model = make_model("GSI_v6_3_3", "logistic", 42, CONFIG)
-    assert model.separation_aware is False
     assert model.cost == 0.30
+    assert model.anchor_threshold == 0.75
     assert model.gamma_min == 0.70
-    assert model.tau_balance == 0.85
+    assert model.cv_folds == 5
 
 
 @pytest.mark.parametrize("learner", CONFIG["base_learners"])

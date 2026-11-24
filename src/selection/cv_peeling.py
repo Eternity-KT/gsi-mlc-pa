@@ -170,13 +170,13 @@ class CVPeelingConfig:
 
     threshold: float = 0.75
     n_folds: int = 5
-    max_depth: int = 3
+    max_depth: int = 1
     cost: float = 0.30
     metric: str = "selective_f1"
     decaying_threshold: bool = False
     threshold_decay_step: float = 0.05
     min_threshold: float = 0.50
-    aug_normalization: str = "matching"
+    aug_normalization: str = "centered"
     min_contextual_labels: int = 0
     dl_order_direction: str = "ascending"
     random_state: int = 42

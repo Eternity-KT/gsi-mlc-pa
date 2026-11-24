@@ -175,11 +175,6 @@ def label_records(truth, full, partial, y_train, label_names, model):
         if label in adaptive:
             th = dict(adaptive[label])
             full_t = 0.5
-            if isinstance(model, GSIMLCPAv6_3_3Classifier):
-                if th["prior"] <= 0.2:
-                    full_t = th["tau_1"]
-                elif th["prior"] >= 0.8:
-                    full_t = th["tau_0"]
         else:
             c = getattr(model, "cost", None)
             th = {"tau_0": c, "tau_1": 1.0 - c if c is not None else None, "prior": float(y_train[:, label].mean()), "regime": "symmetric_chow" if c is not None else "native_binary"}
@@ -301,7 +296,7 @@ def _copy_frozen_baseline_cell(ref_dir, ref_run_id, stem, cell_path, prediction_
 def execute(config_path, output_root, datasets=None, learners=None, folds=None, allow_dirty=False, frozen_baselines_dir=None, models=None):
     config_path = Path(config_path).resolve()
     config = json.loads(config_path.read_text(encoding="utf-8"))
-    if config["gsi_v6_3_3"]["separation_aware"] or config["variant"] != "standard_no_samg":
+    if config["variant"] != "standard_no_samg":
         raise ValueError("Final benchmark requires standard v6.3.3 without SAMG")
     selected_ds = [canonicalize_dataset_name(d) for d in (datasets or config["datasets"])]
     selected_learners = list(learners or config["base_learners"])

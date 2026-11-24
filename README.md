@@ -5,10 +5,12 @@ classification with partial abstention. It provides the GSI-MLC-PA method,
 reference baselines, dataset loaders, cross-validation procedures, evaluation
 metrics and saved predictions used in the experiments.
 
-GSI-MLC-PA discovers high-confidence **Anchor Labels (AL)** through out-of-fold
-evaluation, predicts remaining **Contextual Labels (CL)** conditioned on Anchor
-probability context, and applies unified identity-regularized balanced-root
-calibration with adaptive Tri-Regime thresholds to accept or abstain from
+GSI-MLC-PA uses a minimal 3-hyperparameter architecture (`cost`, `anchor_threshold`,
+`gamma_min`): it discovers high-confidence **Anchor Labels (AL)** in a single
+out-of-fold stage, predicts remaining **Contextual Labels (CL)** conditioned on
+zero-centered Anchor probabilities (`2*P_AL - 1`), and applies unified
+identity-regularized balanced-root calibration with parameter-free closed-form
+prior-adjusted Bayes thresholds and OOF coverage guard to accept or abstain from
 individual label decisions. Each prediction is positive, negative or abstained.
 
 The repository supports reproducing the benchmark and checking reported

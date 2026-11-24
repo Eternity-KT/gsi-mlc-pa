@@ -152,7 +152,7 @@ def test_changed_config_creates_new_run_and_preserves_previous_predictions(check
     first = execute()
     before = prediction_state(first)
     config = json.loads(config_path.read_text(encoding="utf-8"))
-    config["gsi_v6_3_3"]["blend_kappa"] = 21.0
+    config["gsi_v6_3_3"]["gamma_min"] = 0.72
     config_path.write_text(json.dumps(config), encoding="utf-8")
     second = execute()
     assert first != second

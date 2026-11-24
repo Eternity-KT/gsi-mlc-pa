@@ -19,28 +19,13 @@
   "marginal_estimator": "BinaryRelevanceClassifier_of_shared_binary_estimators",
   "mlc_pa": {"cost": 0.30, "penalty": "linear", "decision_policy": "hamming", "abstain_value": -1},
   "gsi_common": {
-    "stratified_threshold": 0.75,
-    "cv_folds": 5,
-    "max_peeling_depth": 3,
-    "peeling_metric": "selective_f1",
-    "decaying_threshold": true,
-    "threshold_decay_step": 0.05,
-    "aug_normalization": "matching",
     "cost": 0.30,
+    "cv_folds": 5,
     "abstain_value": -1
   },
   "gsi_v6_3_3": {
-    "gamma_min": 0.70,
-    "use_prior_adaptive": true,
-    "calibrate_tail": true,
-    "calibration_method": "sqrt_platt",
-    "precision_guard": true,
-    "min_tau_1": 0.50,
-    "tau_balance": 0.85,
-    "blend_kappa": 20.0,
-    "tau_1_cap": 0.55,
-    "tau_0_floor": 0.45,
-    "separation_aware": false
+    "anchor_threshold": 0.75,
+    "gamma_min": 0.70
   },
   "runtime": {
     "torch_threads": 1,
